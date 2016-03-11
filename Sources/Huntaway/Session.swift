@@ -122,6 +122,26 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         }
     }
     
+    // MARK: - Session Delegate
+    //TODO:
+    func URLSession(session: NSURLSession, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+        completionHandler(.PerformDefaultHandling, nil)
+    }
+    
+    func URLSessionDidFinishEventsForBackgroundURLSession(session: NSURLSession) {
+        if let resp = self.responses[0] {
+            if let handler = resp.waked_up_by_system_completion_handler {
+                dispatch_async(dispatch_get_main_queue()) { handler() }
+                resp.waked_up_by_system_completion_handler = nil
+            }
+        } else {
+            if let handler = self.waked_up_by_system_completion_handler {
+                dispatch_async(dispatch_get_main_queue()) { handler() }
+                self.waked_up_by_system_completion_handler = nil
+            }
+        }
+    }
+    
     // MARK: - Session Task Delegate
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
@@ -130,13 +150,6 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.unlock()
         
         guard let resp = response else {
-            //  A task finish event sent to a empty session. I guess
-            //  that's because we're just waked up by system.
-            if let handler = self.waked_up_by_system_completion_handler {
-                handler()
-                self.waked_up_by_system_completion_handler = nil
-            }
-            
             return
         }
         
@@ -176,10 +189,11 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
             completionHandler()
         }
     }
-    /*
+    
+    //TODO:
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
-        
-    }*/
+        completionHandler(.PerformDefaultHandling, nil)
+    }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         self.responsesLock.lock()
@@ -258,13 +272,6 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
                 handler(downloadedFilePath: location)
                 self.waked_up_by_system_user_complettion_handler = nil
             }
-            
-            // FIXME: 
-            if let handler = self.waked_up_by_system_completion_handler {
-                handler()
-                self.waked_up_by_system_completion_handler = nil
-            }
-            
             return
         }
         resp.downloadedFilePath = location

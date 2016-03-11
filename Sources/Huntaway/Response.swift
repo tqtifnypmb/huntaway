@@ -120,7 +120,7 @@ public class Response {
         return self.HTTPHeaders
     }
     
-    /// HTTP response's body.
+    /// Raw data of HTTP response's body.
     /// Block if response is not ready
     public var body: [UInt8]? {
         guard self.ticked else {
