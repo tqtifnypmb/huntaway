@@ -211,4 +211,16 @@ class Unitests: XCTestCase {
             sleep(10)
         }
     }
+    
+    func test_json() {
+        if let resp = HTTPClient.sharedHTTPClient().get("http://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"])?.tick() {
+            if let data = resp.text {
+                print(data)
+            }
+            if let json = resp.bodyJson {
+                print(json)
+            }
+            XCTAssertEqual(resp.statusCode, 200)
+        }
+    }
 }
