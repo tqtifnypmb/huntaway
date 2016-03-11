@@ -66,7 +66,7 @@ Huntaway's goal is:
 ```
   let request = HTTPClient.sharedHTTPClient().prepareRequest("https://www.google.com", .GET)
   request.setHeaders(xxx)
-  request.rememberRedirect = true
+  request.rememberRedirectHistory = true
   
   // more setting
   
