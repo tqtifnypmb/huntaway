@@ -20,7 +20,7 @@ public class Response {
     private let session: Session
     
     private var resumeData: NSData? = nil
-    private var completed = false
+    private var completed: Int32 = 0
     private let condition: NSCondition
     private var ticked = false
     
@@ -230,11 +230,7 @@ public class Response {
     /// Test whether response is ready to use.
     /// This function *Never* block
     public func isReady() -> Bool {
-        self.condition.lock()
-        defer {
-            self.condition.unlock()
-        }
-        return self.completed
+        return OSAtomicCompareAndSwap32(1, 1, &self.completed)
     }
     
     /// Suspend the ongoing task.
@@ -256,10 +252,7 @@ public class Response {
     }
     
     func markCompleted() {
-        self.condition.lock()
-        self.completed = true
-        self.condition.unlock()
-        
+        OSAtomicCompareAndSwap32(0, 1, &self.completed)
         self.condition.broadcast()
     }
     
@@ -278,8 +271,12 @@ public class Response {
     }
     
     private func waitForComplete() {
+        if OSAtomicCompareAndSwap32(1, 1, &self.completed) {
+            return
+        }
+        
         self.condition.lock()
-        while !self.completed {
+        while !OSAtomicCompareAndSwap32(1, 1, &self.completed) {
             self.condition.wait()
         }
         self.condition.unlock()
