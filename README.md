@@ -51,6 +51,7 @@ Huntaway's goal is:
   // more setting
   
   HTTPClient.sharedHTTPClient().send(request)?.tick() { (resp, error) in
+        // do simething with resp
   }
 ```
 
@@ -58,6 +59,7 @@ Huntaway's goal is:
 - Configuration Pattern
 
 ```
+
     let client = HTTPClient()
     
     // proxy
