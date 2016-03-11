@@ -229,7 +229,7 @@ class Unitests: XCTestCase {
         let client = HTTPClient()
         let queue = NSOperationQueue()
 
-        for _ in 0 ..< 165 {
+        for _ in 0 ..< 60 {
             queue.addOperationWithBlock() {
                 if let resp = client.get("http://www.baidu.com")?.tick() {
                     print(resp.statusCode)
