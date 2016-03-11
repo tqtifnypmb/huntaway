@@ -5,6 +5,9 @@ Huntaway's goal is:
 - Make a HTTP request is as simple as calling a function.
 - No complex configuration needed
 
+## Badges
+[![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg?style=flat-square)](http://makeapullreque    st.com)
+
 ## Usage
 
 - Basic Pattern
@@ -73,7 +76,5 @@ Huntaway's goal is:
   HTTPClient.sharedHTTPClient().send(request)?.tick() { (resp, error) in
         // do simething with resp
   }
-```
 
-## Badges
-[![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg?style=flat-square)](http://makeapullreque    st.com)
+```
