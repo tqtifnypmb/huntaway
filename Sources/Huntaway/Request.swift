@@ -26,6 +26,7 @@ public class Request {
     public var cellularAccess = true
     public var networkServiceType: NSURLRequestNetworkServiceType = .NetworkServiceTypeDefault
     public var shouldHandleCookies = true
+    public var rememberRedirectHistory = false
     
     /// Indicate whether data of this request send in stream mode.
     /// If you want to send a file that's too big to be read into memory

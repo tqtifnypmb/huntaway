@@ -32,6 +32,7 @@ public class Response {
     var errorDescription: NSError? = nil
     var receivedData: [UInt8]? = nil
     var downloadedFilePath: NSURL? = nil
+    var HTTPredirectHistory: [NSURL]? = nil
     
     var waked_up_by_system_completion_handler: (() -> Void)? = nil
    
@@ -158,6 +159,18 @@ public class Response {
             return nil
         }
         return String(bytes: data, encoding: NSUTF8StringEncoding)
+    }
+    
+    public var redirectHistory: [NSURL]? {
+        if !self.request.rememberRedirectHistory {
+            return nil
+        }
+        
+        guard self.ticked else {
+            return nil
+        }
+        waitForComplete()
+        return self.HTTPredirectHistory
     }
     
     /// Close this response.

@@ -233,6 +233,13 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
                 completionHandler(nil)
                 return
             }
+            
+            if resp.request.rememberRedirectHistory {
+                if let url = request.URL {
+                    resp.HTTPredirectHistory = resp.HTTPredirectHistory ?? []
+                    resp.HTTPredirectHistory?.append(url)
+                }
+            }
         }
         completionHandler(request)
     }

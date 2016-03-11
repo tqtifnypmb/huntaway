@@ -69,6 +69,7 @@ class Unitests: XCTestCase {
             if let data = resp.body {
                 print(data)
             }
+            resp.tick()
             XCTAssertEqual(resp.statusCode, 200)
         }
     }
@@ -221,6 +222,29 @@ class Unitests: XCTestCase {
                 print(json)
             }
             XCTAssertEqual(resp.statusCode, 200)
+        }
+    }
+    
+    func test_multi_thread() {
+        let client = HTTPClient()
+        let queue = NSOperationQueue()
+
+        for _ in 0 ..< 165 {
+            queue.addOperationWithBlock() {
+                if let resp = client.get("http://www.baidu.com")?.tick() {
+                    print(resp.statusCode)
+                    resp.close()
+                }
+            }
+        }
+        queue.waitUntilAllOperationsAreFinished()
+    }
+    
+    func test_redirect_history() {
+        if let req = HTTPClient.sharedHTTPClient().prepareRequest("https://httpbin.org/redirect/2", method: .GET) {
+            req.rememberRedirectHistory = true
+            let resp = HTTPClient.sharedHTTPClient().send(req)?.tick()
+            print(resp?.redirectHistory)
         }
     }
 }
