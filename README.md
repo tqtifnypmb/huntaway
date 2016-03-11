@@ -16,10 +16,29 @@ Huntaway's goal is:
 
     // POST
     HTTPClient.sharedHTTPClient().post("https://www.google.com", "data_to_post")?.tick() { (response, error) in
+        //...
     }
 
+    // DOWNLOAD
+    HTTPClient.sharedHTTPClient().download("https://www.google.com")?.tick() { (resp, error) in
+        //...
+    }
     // so on
     ...
+```
+
+- Configuration Pattern
+
+```
+
+    let client = HTTPClient()
+    
+    // proxy
+    client.config.proxy.setHost(xxx).setPasswd(xxx).setPort(xxx).apply()
+    
+    // config
+    client.config.shouldSetCookies(true).additonalHeaders(xxx).apply()
+    
 ```
 
 - More Control
@@ -53,21 +72,6 @@ Huntaway's goal is:
   HTTPClient.sharedHTTPClient().send(request)?.tick() { (resp, error) in
         // do simething with resp
   }
-```
-
-
-- Configuration Pattern
-
-```
-
-    let client = HTTPClient()
-    
-    // proxy
-    client.config.proxy.setHost(xxx).setPasswd(xxx).setPort(xxx).apply()
-    
-    // config
-    client.config.shouldSetCookies(true).additonalHeaders(xxx).apply()
-    
 ```
 
 ## Badges
