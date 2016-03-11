@@ -69,3 +69,6 @@ Huntaway's goal is:
     client.config.shouldSetCookies(true).additonalHeaders(xxx).apply()
     
 ```
+
+## Badges
+[![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg?style=flat-square)](http://makeapullreque    st.com)
