@@ -12,7 +12,7 @@ public class Configuration {
     
     private var config: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
     private var changed = false
-    private var proxySettings: Proxy = Proxy()
+    private lazy var proxySettings: Proxy = { return Proxy(config: self) }()
     private unowned let client: HTTPClient
     init(client: HTTPClient) {
         self.client = client
@@ -124,8 +124,15 @@ public class Configuration {
     
     public class Proxy {
         var changed = false
+        private unowned let config: Configuration
         private var proxySettings: [NSObject: AnyObject] = [:]
-        init() {
+        init(config: Configuration) {
+            self.config = config
+        }
+        
+        /// Apply changed
+        public func apply() {
+            self.config.apply()
         }
         
         /// Set hostname or IP number of the proxy host
