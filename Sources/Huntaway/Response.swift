@@ -131,6 +131,22 @@ public class Response {
         return self.receivedData
     }
     
+    public var bodyJson: AnyObject? {
+        guard self.ticked else {
+            return nil
+        }
+        guard var body = self.body else {
+            return nil
+        }
+        
+        let data = NSData(bytes: &body, length: body.count)
+        do {
+            return try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+        } catch {
+            return nil
+        }
+    }
+    
     /// String representatino of HTTP response's body
     public var text: String? {
         guard self.ticked else {
