@@ -33,6 +33,7 @@ public class Response {
     var receivedData: [UInt8]? = nil
     var downloadedFilePath: NSURL? = nil
     var HTTPredirectHistory: [NSURL]? = nil
+    var authTriedUsername: [String]? = nil
     
     var waked_up_by_system_completion_handler: (() -> Void)? = nil
    

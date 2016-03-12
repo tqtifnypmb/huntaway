@@ -190,9 +190,41 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         }
     }
     
-    //TODO:
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
-        completionHandler(.PerformDefaultHandling, nil)
+        var credentials: [String: NSURLCredential] = [:]
+        // Try to get all credentials with same protection host
+        if session.configuration.URLCredentialStorage != nil {
+            for (space, credential) in session.configuration.URLCredentialStorage!.allCredentials {
+                guard challenge.protectionSpace.host == space.host else { continue }
+                
+                for (key, value) in credential {
+                    credentials[key] = value
+                }
+            }
+        }
+        guard !credentials.isEmpty && challenge.previousFailureCount < credentials.count else { return completionHandler(.PerformDefaultHandling, nil) }
+        
+        self.responsesLock.lock()
+        let response = self.responses[task.taskIdentifier]
+        self.responsesLock.unlock()
+        
+        guard let resp = response else { return completionHandler(.PerformDefaultHandling, nil) }
+        
+        if challenge.previousFailureCount == 0 {
+            let (username, credential) = credentials.first!
+            resp.authTriedUsername = []
+            resp.authTriedUsername?.append(username)
+            return completionHandler(.UseCredential, credential)
+        } else {
+            for (username, credential) in credentials {
+                guard !resp.authTriedUsername!.contains(username) else {
+                    continue
+                }
+                resp.authTriedUsername?.append(username)
+                return completionHandler(.UseCredential, credential)
+            }
+            assert(false, "Logic Error. This should never run")
+        }
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
@@ -229,7 +261,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.unlock()
         
         if let resp = resp {
-            if !resp.request.allowRedirect {
+            if !resp.request.allowRedirect || resp.request.current_redirect_count > resp.request.maxRedirect {
                 completionHandler(nil)
                 return
             }
@@ -273,7 +305,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.unlock()
         
         guard let resp = response else {
-            //  A task finish event sent to an empty session. I guess
+            //  A download finish event sent to an empty session. I guess
             //  that's because we're just waked up by system.
             if let handler = self.waked_up_by_system_user_complettion_handler {
                 handler(downloadedFilePath: location)

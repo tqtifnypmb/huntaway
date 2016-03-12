@@ -500,7 +500,8 @@ public final class HTTPClient {
     ///     - a request to send
     ///
     /// - Returns: *nil* if *request* is not correctly configured
-    public func send(request: Request) -> Response? {        
+    public func send(request: Request) -> Response? {
+        request.current_redirect_count = 0
         if request.outlast == true {
             guard (request.filePath != nil && request.HTTPMethod == .POST) || (request.HTTPMethod == .DOWNLOAD) else {
                 return nil
@@ -555,6 +556,7 @@ public final class HTTPClient {
     
     // Apply new configuration
     func applyConfig(config: NSURLSessionConfiguration) {
+        //FIXME: Empty Session may never be removed
         self.defaultSession.decaySelf()
         self.decaySession.append(self.defaultSession)
         self.defaultSession = Session(config: config, client: self)
