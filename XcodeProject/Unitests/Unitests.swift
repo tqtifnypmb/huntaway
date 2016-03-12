@@ -264,7 +264,7 @@ class Unitests: XCTestCase {
     
     func test_auth_basic() {
         let client = HTTPClient()
-        client.config.auth.basic("abcabc", passwd: "123456", url: NSURL(string: "https://httpbin.org/")!, "Fake Realm").apply()
+        client.config.auth.basic(user: "abcabc", passwd: "123456", url: NSURL(string: "https://httpbin.org/")!, "Fake Realm").apply()
         if let resp = client.get("https://httpbin.org/basic-auth/abcabc/123456")?.tick() {
             if let data = resp.text {
                 print(data)
@@ -278,9 +278,9 @@ class Unitests: XCTestCase {
     
     func test_auth_basic_2() {
         let client = HTTPClient()
-        client.config.auth.basic("abcabc", passwd: "123456", url: NSURL(string: "http://httpbin.org/")!, "Fake Realm")
-            .basic("123", passwd: "123", url: NSURL(string: "https://httpbin.org/")!, "Fake Realm")
-            .basic("1234", passwd: "1234", url: NSURL(string: "https://httpbin.org/")!, "Fake Realm")
+        client.config.auth.basic(user: "abcabc", passwd: "123456", url: NSURL(string: "http://httpbin.org/")!, "Fake Realm")
+            .basic(user: "123", passwd: "123", url: NSURL(string: "https://httpbin.org/")!, "Fake Realm")
+            .basic(user: "1234", passwd: "1234", url: NSURL(string: "https://httpbin.org/")!, "Fake Realm")
             .apply()
         if let resp = client.get("http://httpbin.org/basic-auth/1234/1234")?.tick() {
             if let data = resp.text {
@@ -295,7 +295,7 @@ class Unitests: XCTestCase {
     
     func test_auth_digest() {
         let client = HTTPClient()
-        client.config.auth.digest("abcabc", passwd: "123456", url: NSURL(string: "https://httpbin.org/")!).apply()
+        client.config.auth.digest(user: "abcabc", passwd: "123456", url: NSURL(string: "https://httpbin.org/")!).apply()
         if let resp = client.get("https://httpbin.org/digest-auth/auth/abcabc/123456")?.tick() {
             if let data = resp.text {
                 print(data)
