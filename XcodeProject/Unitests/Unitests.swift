@@ -306,4 +306,16 @@ class Unitests: XCTestCase {
             XCTAssertEqual(resp.statusCode, 200)
         }
     }
+    
+    func test_per_request_auth() {
+        if let req = HTTPClient.sharedHTTPClient().prepareRequest("https://httpbin.org/basic-auth/abcabc/123456", method: .GET) {
+            req.basicAuth(user: "abcabc", passwd: "123456")
+            if let resp = HTTPClient.sharedHTTPClient().send(req)?.tick() {
+                if let data = resp.body {
+                    print(data)
+                }
+                XCTAssertEqual(resp.statusCode, 200)
+            }
+        }
+    }
 }
