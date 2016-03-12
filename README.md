@@ -91,9 +91,9 @@ Huntaway's goal is:
     // per request
 
     let request = HTTPClient.sharedHTTPClient().prepareRequest("https://www.google.com", .GET)
-    request.basic(user: xxx, passwd: xxx)
+    request.basicAuth(user: xxx, passwd: xxx)
 
     // or
-    request.digest(user: xxx, passwd: xxx)
+    request.digestAuth(user: xxx, passwd: xxx)
 ```
 
