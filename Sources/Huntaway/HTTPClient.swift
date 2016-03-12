@@ -40,9 +40,7 @@ public final class HTTPClient {
             }
             copy.removeAtIndex(copy.endIndex.predecessor())
         }
-        guard let encodedURL = NSURL(string: copy, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: copy, relativeToURL: nil) else { return nil }
         return self.get(encodedURL)
     }
     
@@ -53,9 +51,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func get(url: NSURL) -> Response? {
-        guard let request = self.prepareRequest(url, method: .GET) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .GET) else { return nil }
         return self.send(request)
     }
     
@@ -76,9 +72,7 @@ public final class HTTPClient {
             }
             copy.removeAtIndex(copy.endIndex.predecessor())
         }
-        guard let encodedURL = NSURL(string: copy, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: copy, relativeToURL: nil) else { return nil }
         return self.get(encodedURL)
     }
     
@@ -89,9 +83,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func head(url: NSURL) -> Response? {
-        guard let request = self.prepareRequest(url, method: .GET) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .GET) else { return nil }
         return self.send(request)
     }
     
@@ -104,9 +96,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func post(url: String, data: NSData, _ stream: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.post(encodedURL, data: data, stream)
     }
     
@@ -119,9 +109,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func post(url: NSURL, data: NSData, _ stream: Bool = false) -> Response? {
-        guard let request = self.prepareRequest(url, method: .POST) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .POST) else { return nil }
         request.stream = stream
         request.data = data
         return self.send(request)
@@ -137,9 +125,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL or *file* is not exist, otherwise return a *response*
     public func post(url: String, file: NSURL, _ stream: Bool = false, _ outlast: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.post(encodedURL, file: file, outlast, stream)
     }
     
@@ -153,13 +139,9 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL or *file* is not exist, otherwise return a *response*
     public func post(url: NSURL, file: NSURL, _ stream: Bool = false, _ outlast: Bool = false) -> Response? {
-        guard NSFileManager.defaultManager().fileExistsAtPath(file.absoluteString) else {
-            return nil
-        }
+        guard NSFileManager.defaultManager().fileExistsAtPath(file.absoluteString) else { return nil }
+        guard let request = self.prepareRequest(url, method: .POST) else { return nil }
         
-        guard let request = self.prepareRequest(url, method: .POST) else {
-            return nil
-        }
         request.outlast = outlast
         request.stream = stream
         request.filePath = file
@@ -175,9 +157,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func post(url: String, data: String, _ stream: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.post(encodedURL, data: data, stream)
     }
     
@@ -190,9 +170,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func post(url: NSURL, data: String, _ stream: Bool = false) -> Response? {
-        guard let request = self.prepareRequest(url, method: .POST) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .POST) else { return nil }
         request.stream = stream
         request.data = data.dataUsingEncoding(NSUTF8StringEncoding)
 
@@ -208,9 +186,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func put(url: String, data: NSData, _ stream: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.put(encodedURL, data: data, stream)
     }
     
@@ -223,9 +199,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func put(url: NSURL, data: NSData, _ stream: Bool = false) -> Response? {
-        guard let request = self.prepareRequest(url, method: .PUT) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .PUT) else { return nil }
         request.stream = stream
         request.data = data
         return self.send(request)
@@ -240,9 +214,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func put(url: String, data: String, _ stream: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.put(encodedURL, data: data, stream)
     }
     
@@ -254,9 +226,7 @@ public final class HTTPClient {
     ///     - stream:   whether data be sent in stream mode or not
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func put(url: NSURL, data: String, _ stream: Bool = false) -> Response? {
-        guard let request = self.prepareRequest(url, method: .PUT) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .PUT) else { return nil }
         request.stream = stream
         request.data = data.dataUsingEncoding(NSUTF8StringEncoding)
         return self.send(request)
@@ -272,9 +242,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL or file is not exist, otherwise return a *response*
     public func put(url: String, file: NSURL, _ stream: Bool = false, _ outlast: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.put(encodedURL, file: file, stream, outlast)
     }
     
@@ -288,13 +256,9 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL or *file* is not exist, otherwise return a *response*
     public func put(url: NSURL, file: NSURL, _ stream: Bool = false, _ outlast: Bool = false) -> Response? {
-        guard NSFileManager.defaultManager().fileExistsAtPath(file.absoluteString) else {
-            return nil
-        }
+        guard NSFileManager.defaultManager().fileExistsAtPath(file.absoluteString) else { return nil }
+        guard let request = self.prepareRequest(url, method: .PUT) else { return nil }
         
-        guard let request = self.prepareRequest(url, method: .PUT) else {
-            return nil
-        }
         request.stream = stream
         request.filePath = file
         request.outlast = outlast
@@ -309,9 +273,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func delete(url: String, data: String) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.delete(encodedURL, data: data)
     }
     
@@ -323,9 +285,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func delete(url: NSURL, data: String) -> Response? {
-        guard let request = self.prepareRequest(url, method: .DELETE) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .DELETE) else { return nil }
         request.data = data.dataUsingEncoding(NSUTF8StringEncoding)
         return self.send(request)
     }
@@ -338,9 +298,7 @@ public final class HTTPClient {
     ///     - stream:   whether data be sent in stream mode or not 
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func patch(url: String, data: NSData, _ stream: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.patch(encodedURL, data: data, stream)
     }
     
@@ -353,9 +311,7 @@ public final class HTTPClient {
     ///                 **default**= false
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func patch(url: NSURL, data: NSData, _ stream: Bool = false) -> Response? {
-        guard let request = self.prepareRequest(url, method: .PATCH) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .PATCH) else { return nil }
         request.stream = stream
         request.data = data
         return self.send(request)
@@ -370,9 +326,7 @@ public final class HTTPClient {
     ///                 **default**= false
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func patch(url: String, data: String, _ stream: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.patch(encodedURL, data: data, stream)
     }
     
@@ -385,9 +339,7 @@ public final class HTTPClient {
     ///                 **default**= false
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func patch(url: NSURL, data: String, _ stream: Bool = false) -> Response? {
-        guard let request = self.prepareRequest(url, method: .PATCH) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .PATCH) else { return nil }
         request.stream = stream
         request.data = data.dataUsingEncoding(NSUTF8StringEncoding)
         return self.send(request)
@@ -404,9 +356,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL or *file* is not exist, otherwise return a *response*
     public func patch(url: String, file: NSURL, _ stream: Bool = false, _ outlast: Bool = false) -> Response? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.patch(encodedURL, file: file, stream, outlast)
     }
     
@@ -421,13 +371,9 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL or *file* is not exist, otherwise return a *response*
     public func patch(url: NSURL, file: NSURL, _ stream: Bool = false, _ outlast: Bool = false) -> Response? {
-        guard NSFileManager.defaultManager().fileExistsAtPath(file.absoluteString) else {
-            return nil
-        }
+        guard NSFileManager.defaultManager().fileExistsAtPath(file.absoluteString) else { return nil }
+        guard let request = self.prepareRequest(url, method: .PATCH) else { return nil }
         
-        guard let request = self.prepareRequest(url, method: .PATCH) else {
-            return nil
-        }
         request.stream = stream
         request.filePath = file
         request.outlast = outlast
@@ -467,9 +413,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *response*
     public func download(url: NSURL, _ outlast: Bool = true) -> Response? {
-        guard let request = self.prepareRequest(url, method: .DOWNLOAD) else {
-            return nil
-        }
+        guard let request = self.prepareRequest(url, method: .DOWNLOAD) else { return nil }
         request.outlast = outlast
         return self.send(request)
     }
@@ -503,9 +447,7 @@ public final class HTTPClient {
     public func send(request: Request) -> Response? {
         request.current_redirect_count = 0
         if request.outlast == true {
-            guard (request.filePath != nil && request.HTTPMethod == .POST) || (request.HTTPMethod == .DOWNLOAD) else {
-                return nil
-            }
+            guard (request.filePath != nil && request.HTTPMethod == .POST) || (request.HTTPMethod == .DOWNLOAD) else { return nil }
             
             let config = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(Utils.randomIdentifier())
             let session = Session(config: config, client: self)
@@ -524,9 +466,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *request*
     public func prepareRequest(url: String, method: Method) -> Request? {
-        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else {
-            return nil
-        }
+        guard let encodedURL = NSURL(string: url, relativeToURL: nil) else { return nil }
         return self.prepareRequest(encodedURL, method: method)
     }
     
@@ -538,9 +478,7 @@ public final class HTTPClient {
     ///
     /// - Returns: *nil* if *url* is not a valid URL, otherwise return a *request*
     public func prepareRequest(url: NSURL, method: Method) -> Request? {
-        guard Utils.validScheme(url) else {
-            return nil
-        }
+        guard Utils.validScheme(url) else { return nil }
         return Request(url: url, method: method)
     }
     

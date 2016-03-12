@@ -22,6 +22,8 @@ public class Response {
     private var resumeData: NSData? = nil
     private var completed: Int32 = 0
     private let condition: NSCondition
+    
+    //FIXME: thread-safe issue ??
     private var ticked = false
     
     let task: NSURLSessionTask
@@ -47,9 +49,8 @@ public class Response {
     /// Status code
     /// Block if response is not ready
     public var statusCode: Int {
-        guard self.ticked else {
-            return 0
-        }
+        guard self.ticked else { return 0 }
+        
         waitForComplete()
         return self.HTTPStatusCode
     }
@@ -57,9 +58,8 @@ public class Response {
     /// string description of statusCode
     /// Block if response is not ready
     public var reason: String {
-        guard self.ticked else {
-            return ""
-        }
+        guard self.ticked else { return "" }
+        
         return NSHTTPURLResponse.localizedStringForStatusCode(self.statusCode)
     }
     
@@ -70,9 +70,8 @@ public class Response {
     ///
     /// - Returns: nil, if you didn't download anything
     public var downloadedFile: NSURL? {
-        guard self.ticked else {
-            return nil
-        }
+        guard self.ticked else { return nil }
+        
         self.waitForComplete()
         return self.downloadedFilePath
     }
@@ -84,20 +83,18 @@ public class Response {
     
     /// HTTP response's URL
     /// Block if response is not ready
-    public var URL: NSURL {
-        guard self.ticked else {
-            return NSURL()
-        }
+    public var URL: NSURL? {
+        guard self.ticked else { return nil }
+        
         waitForComplete()
-        return self.task.response!.URL!
+        return self.task.response!.URL
     }
     
     /// Network error
     /// Block if response is not ready
     public var error: NSError? {
-        guard self.ticked else {
-            return nil
-        }
+        guard self.ticked else { return nil }
+        
         waitForComplete()
         return self.errorDescription
     }
@@ -105,9 +102,8 @@ public class Response {
     /// HTTP cookies
     /// Block if response is not ready
     public var cookies: [String: String]? {
-        guard self.ticked else {
-            return nil
-        }
+        guard self.ticked else { return nil }
+        
         waitForComplete()
         return self.HTTPCookies
     }
@@ -115,9 +111,8 @@ public class Response {
     /// HTTP response's headers
     /// Block if response is not ready
     public var headers: [String: String]? {
-        guard self.ticked else {
-            return nil
-        }
+        guard self.ticked else { return nil }
+        
         waitForComplete()
         return self.HTTPHeaders
     }
@@ -125,21 +120,15 @@ public class Response {
     /// Raw data of HTTP response's body.
     /// Block if response is not ready
     public var body: [UInt8]? {
-        guard self.ticked else {
-            return nil
-        }
-        waitForComplete()
+        guard self.ticked else { return nil }
         
+        waitForComplete()
         return self.receivedData
     }
     
     public var bodyJson: AnyObject? {
-        guard self.ticked else {
-            return nil
-        }
-        guard var body = self.body else {
-            return nil
-        }
+        guard self.ticked else { return nil }
+        guard var body = self.body else { return nil }
         
         let data = NSData(bytes: &body, length: body.count)
         do {
@@ -151,25 +140,18 @@ public class Response {
     
     /// String representatino of HTTP response's body
     public var text: String? {
-        guard self.ticked else {
-            return nil
-        }
+        guard self.ticked else { return nil }
+        
         waitForComplete()
         
-        guard let data = self.receivedData else {
-            return nil
-        }
+        guard let data = self.receivedData else { return nil }
+        
         return String(bytes: data, encoding: NSUTF8StringEncoding)
     }
     
     public var redirectHistory: [NSURL]? {
-        if !self.request.rememberRedirectHistory {
-            return nil
-        }
+        if !self.request.rememberRedirectHistory && self.ticked { return nil }
         
-        guard self.ticked else {
-            return nil
-        }
         waitForComplete()
         return self.HTTPredirectHistory
     }
@@ -204,9 +186,8 @@ public class Response {
     /// **Note** This hook should be set before response get ticked.
     /// Hooks set after response tick might not be called
     public func onBegin(beginHandler: () -> Void) {
-        guard !self.ticked else {
-            return
-        }
+        guard !self.ticked else { return }
+        
         self.beginHandler = beginHandler
     }
     

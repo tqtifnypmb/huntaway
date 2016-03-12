@@ -64,9 +64,7 @@ final class Utils {
                 NSHTTPCookieOriginURL: url,
                 NSHTTPCookiePath: url.path ?? "/"
             ]
-            guard let toAdd = NSHTTPCookie(properties: properties) else {
-                continue
-            }
+            guard let toAdd = NSHTTPCookie(properties: properties) else { continue }
             ret.append(toAdd)
         }
         return ret

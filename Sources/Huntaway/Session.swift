@@ -149,13 +149,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let response = self.responses[task.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let resp = response else {
-            return
-        }
-        
-        guard !(resp.task is NSURLSessionDownloadTask) else {
-            return
-        }
+        guard let resp = response else { return }
+        guard !(resp.task is NSURLSessionDownloadTask) else { return }
         
         resp.errorDescription = error
         
@@ -163,9 +158,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         if let urlResponse = task.response as? NSHTTPURLResponse {
             resp.HTTPHeaders = [:]
             for (key, value) in urlResponse.allHeaderFields {
-                guard let key = key as? String , let value = value as? String else {
-                    continue
-                }
+                guard let key = key as? String , let value = value as? String else { continue }
                 resp.HTTPHeaders![key] = value
             }
             resp.HTTPStatusCode = urlResponse.statusCode
@@ -217,9 +210,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
             return completionHandler(.UseCredential, credential)
         } else {
             for (username, credential) in credentials {
-                guard !resp.authTriedUsername!.contains(username) else {
-                    continue
-                }
+                guard !resp.authTriedUsername!.contains(username) else { continue }
                 resp.authTriedUsername?.append(username)
                 return completionHandler(.UseCredential, credential)
             }
@@ -232,9 +223,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let resp = self.responses[task.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let processHandler = resp?.process_handler else {
-            return
-        }
+        guard let processHandler = resp?.process_handler else { return }
         
         let progress = Progress(type: .Sending, did: bytesSent, done: totalBytesSent, workload: totalBytesExpectedToSend)
         processHandler(progress: progress, error: task.error)
@@ -245,9 +234,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let response = self.responses[task.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let resp = response else {
-            return
-        }
+        guard let resp = response else { return }
         if let filePath = resp.request.filePath {
             completionHandler(NSInputStream(URL: filePath))
         } else if let data = resp.request.data {
@@ -283,9 +270,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let response = self.responses[dataTask.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let resp = response else {
-            return
-        }
+        guard let resp = response else { return }
         
         resp.receivedData = resp.receivedData ?? []
         data.enumerateByteRangesUsingBlock { (bytes , range , stop) -> Void in
@@ -331,10 +316,9 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.lock()
         let resp = self.responses[downloadTask.taskIdentifier]
         self.responsesLock.unlock()
+    
+        guard let processHandler = resp?.process_handler else { return }
         
-        guard let processHandler = resp?.process_handler else {
-            return
-        }
         let progress = Progress(type: .Receiving, did: 0, done: fileOffset, workload: expectedTotalBytes)
         processHandler(progress: progress, error: downloadTask.error)
     }
@@ -344,9 +328,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let resp = self.responses[downloadTask.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let processHandler = resp?.process_handler else {
-            return
-        }
+        guard let processHandler = resp?.process_handler else { return }
         
         let progress = Progress(type: .Receiving, did: bytesWritten, done: totalBytesWritten, workload: totalBytesExpectedToWrite)
         processHandler(progress: progress, error: downloadTask.error)
