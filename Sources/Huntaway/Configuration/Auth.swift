@@ -15,7 +15,14 @@ public class Auth {
         self.config = config
     }
     
-    public var storeInMemoryOnly = false
+    // FIXME: Is this really necessary??
+    private var memoryOnly = false
+    
+    // Determin whether the auth information is only store in memory
+    public func storeInMemoryOnly(s: Bool) -> Auth {
+        self.memoryOnly = s
+        return self
+    }
     
     /// Use HTTP basic authentication for *url*
     public func basic(user: String, passwd: String, url: NSURL, _ realm: String? = nil) -> Auth {
@@ -51,10 +58,7 @@ public class Auth {
     var auth: NSURLCredentialStorage? {
         guard let settings = self.authSettings else { return nil }
         
-        var storage = NSURLCredentialStorage.sharedCredentialStorage()
-        if self.storeInMemoryOnly {
-            storage = NSURLCredentialStorage()
-        }
+        let storage = NSURLCredentialStorage.sharedCredentialStorage()
         for (credential, protectSpace) in settings {
             storage.setCredential(credential, forProtectionSpace: protectSpace)
         }
