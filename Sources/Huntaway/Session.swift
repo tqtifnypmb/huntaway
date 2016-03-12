@@ -149,13 +149,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let response = self.responses[task.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let resp = response else {
-            return
-        }
-        
-        guard !(resp.task is NSURLSessionDownloadTask) else {
-            return
-        }
+        guard let resp = response else { return }
+        guard !(resp.task is NSURLSessionDownloadTask) else { return }
         
         resp.errorDescription = error
         
@@ -163,9 +158,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         if let urlResponse = task.response as? NSHTTPURLResponse {
             resp.HTTPHeaders = [:]
             for (key, value) in urlResponse.allHeaderFields {
-                guard let key = key as? String , let value = value as? String else {
-                    continue
-                }
+                guard let key = key as? String , let value = value as? String else { continue }
                 resp.HTTPHeaders![key] = value
             }
             resp.HTTPStatusCode = urlResponse.statusCode
@@ -190,9 +183,54 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         }
     }
     
-    //TODO:
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
-        completionHandler(.PerformDefaultHandling, nil)
+  
+        self.responsesLock.lock()
+        let response = self.responses[task.taskIdentifier]
+        self.responsesLock.unlock()
+        guard let resp = response else { return completionHandler(.PerformDefaultHandling, nil) }
+        
+        // Try per request sepecific auth
+        
+        if let requestBasic = resp.request.basicAuthSettings {
+            resp.request.basic = nil
+            
+            return completionHandler(.UseCredential, requestBasic)
+        }
+        
+        if let requestDigest = resp.request.diegestAuthSettings {
+            resp.request.digest = nil
+            
+            return completionHandler(.UseCredential, requestDigest)
+        }
+        
+        // Try global auth 
+        
+        var credentials: [String: NSURLCredential] = [:]
+        if session.configuration.URLCredentialStorage != nil {
+            for (space, credential) in session.configuration.URLCredentialStorage!.allCredentials {
+                guard challenge.protectionSpace.host == space.host else { continue }
+                
+                for (key, value) in credential {
+                    credentials[key] = value
+                }
+            }
+        }
+        guard !credentials.isEmpty && challenge.previousFailureCount < credentials.count else { return completionHandler(.PerformDefaultHandling, nil) }
+        
+        if challenge.previousFailureCount == 0 {
+            let (username, credential) = credentials.first!
+            resp.authTriedUsername = []
+            resp.authTriedUsername?.append(username)
+            return completionHandler(.UseCredential, credential)
+        } else {
+            for (username, credential) in credentials {
+                guard !resp.authTriedUsername!.contains(username) else { continue }
+                resp.authTriedUsername?.append(username)
+                return completionHandler(.UseCredential, credential)
+            }
+            assert(false, "Logic Error. This should never run")
+        }
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
@@ -200,9 +238,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let resp = self.responses[task.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let processHandler = resp?.process_handler else {
-            return
-        }
+        guard let processHandler = resp?.process_handler else { return }
         
         let progress = Progress(type: .Sending, did: bytesSent, done: totalBytesSent, workload: totalBytesExpectedToSend)
         processHandler(progress: progress, error: task.error)
@@ -213,9 +249,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let response = self.responses[task.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let resp = response else {
-            return
-        }
+        guard let resp = response else { return }
         if let filePath = resp.request.filePath {
             completionHandler(NSInputStream(URL: filePath))
         } else if let data = resp.request.data {
@@ -229,7 +263,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.unlock()
         
         if let resp = resp {
-            if !resp.request.allowRedirect {
+            if !resp.request.allowRedirect || resp.request.current_redirect_count > resp.request.maxRedirect {
                 completionHandler(nil)
                 return
             }
@@ -251,9 +285,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let response = self.responses[dataTask.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let resp = response else {
-            return
-        }
+        guard let resp = response else { return }
         
         resp.receivedData = resp.receivedData ?? []
         data.enumerateByteRangesUsingBlock { (bytes , range , stop) -> Void in
@@ -273,7 +305,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.unlock()
         
         guard let resp = response else {
-            //  A task finish event sent to an empty session. I guess
+            //  A download finish event sent to an empty session. I guess
             //  that's because we're just waked up by system.
             if let handler = self.waked_up_by_system_user_complettion_handler {
                 handler(downloadedFilePath: location)
@@ -299,10 +331,9 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.lock()
         let resp = self.responses[downloadTask.taskIdentifier]
         self.responsesLock.unlock()
+    
+        guard let processHandler = resp?.process_handler else { return }
         
-        guard let processHandler = resp?.process_handler else {
-            return
-        }
         let progress = Progress(type: .Receiving, did: 0, done: fileOffset, workload: expectedTotalBytes)
         processHandler(progress: progress, error: downloadTask.error)
     }
@@ -312,9 +343,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let resp = self.responses[downloadTask.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let processHandler = resp?.process_handler else {
-            return
-        }
+        guard let processHandler = resp?.process_handler else { return }
         
         let progress = Progress(type: .Receiving, did: bytesWritten, done: totalBytesWritten, workload: totalBytesExpectedToWrite)
         processHandler(progress: progress, error: downloadTask.error)

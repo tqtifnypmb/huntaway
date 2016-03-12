@@ -11,8 +11,9 @@ import Foundation
 public class Configuration {
     
     private var config: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-    private var changed = false
+    var changed = false
     private lazy var proxySettings: Proxy = { return Proxy(config: self) }()
+    private lazy var authSettings: Auth = { return Auth(config: self) }()
     private unowned let client: HTTPClient
     init(client: HTTPClient) {
         self.client = client
@@ -20,6 +21,10 @@ public class Configuration {
     
     public var proxy: Proxy {
         return self.proxySettings
+    }
+    
+    public var auth: Auth {
+        return self.authSettings
     }
     
     /// The timeout interval to use when waiting for additional data. 
@@ -111,86 +116,15 @@ public class Configuration {
     
     /// Apply the configuration just set
     public func apply() {
-        guard self.changed || self.proxy.changed else {
-            return
-        }
+        guard self.changed else { return }
         self.changed = false
-        self.proxy.changed = false
         if let proxySettings = self.proxy.proxy {
             self.config.connectionProxyDictionary = proxySettings
         }
+        
+        if let authSettings = self.auth.auth {
+            self.config.URLCredentialStorage = authSettings
+        }
         self.client.applyConfig(self.config)
-    }
-    
-    public class Proxy {
-        var changed = false
-        private unowned let config: Configuration
-        private var proxySettings: [NSObject: AnyObject] = [:]
-        init(config: Configuration) {
-            self.config = config
-        }
-        
-        /// Apply changed
-        public func apply() {
-            self.config.apply()
-        }
-        
-        /// Set hostname or IP number of the proxy host
-        public func setHost(name: String) -> Proxy {
-            self.changed = true
-            self.proxySettings[kCFProxyHostNameKey] = name
-            return self
-        }
-        
-        /// Set port that should be used to contact the proxy
-        public func setPort(port: UInt16) -> Proxy {
-            self.changed = true
-            self.proxySettings[kCFProxyPortNumberKey] = NSNumber(unsignedShort: port)
-            return self
-        }
-        
-        /// Set the password to be used when contacting the proxy
-        public func setPasswd(pwd: String) -> Proxy {
-            self.changed = true
-            self.proxySettings[kCFProxyPasswordKey] = pwd
-            return self
-        }
-        
-        /// Set the username to be used when contacting the proxy
-        public func setUserName(user: String) -> Proxy {
-            self.changed = true
-            self.proxySettings[kCFProxyUsernameKey] = user
-            return self
-        }
-        
-        /// Specifies the type of proxy
-        public func setProxyType(type: ProxyType) -> Proxy {
-            self.changed = true
-            switch type {
-            case .FTP:
-                self.proxySettings[kCFProxyTypeKey] = kCFProxyTypeFTP
-            case .HTTP:
-                self.proxySettings[kCFProxyTypeKey] = kCFProxyTypeHTTP
-            case .HTTPS:
-                self.proxySettings[kCFProxyTypeKey] = kCFProxyTypeHTTPS
-            case .SOCKS:
-                self.proxySettings[kCFProxyTypeKey] = kCFProxyTypeSOCKS
-            }
-            return self
-        }
-        
-        var proxy: [NSObject: AnyObject]? {
-            guard !self.proxySettings.isEmpty else {
-                return nil
-            }
-            return self.proxySettings
-        }
-    }
-    
-    public enum ProxyType {
-        case FTP
-        case HTTP
-        case HTTPS
-        case SOCKS
     }
 }

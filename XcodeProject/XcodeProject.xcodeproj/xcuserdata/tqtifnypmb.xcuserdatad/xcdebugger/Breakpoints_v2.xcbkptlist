@@ -29,22 +29,6 @@
             timestampString = "479398663.690275"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
-            landmarkName = "URLSession(_:task:didCompleteWithError:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Sources/Huntaway/Session.swift"
-            timestampString = "479398663.690275"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
             startingLineNumber = "175"
             endingLineNumber = "175"
             landmarkName = "URLSession(_:task:didCompleteWithError:)"
@@ -58,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Request.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "Request"
             landmarkType = "3">
          </BreakpointContent>
@@ -74,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Request.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
             landmarkName = "Request"
             landmarkType = "3">
          </BreakpointContent>
@@ -122,12 +106,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Session.swift"
-            timestampString = "479398663.690275"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "URLSession(_:task:didReceiveChallenge:completionHandler:)"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
+            landmarkName = "URLSession(_:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -186,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Session.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
             landmarkName = "URLSession(_:dataTask:didReceiveData:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -218,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Session.swift"
-            timestampString = "479398663.690275"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
             landmarkName = "URLSession(_:task:willPerformHTTPRedirection:newRequest:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -335,8 +319,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "165"
             endingLineNumber = "165"
-            landmarkName = "post(_:file:_:_:)"
-            landmarkType = "5">
+            landmarkName = "HTTPClient"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -352,22 +336,6 @@
             startingLineNumber = "17"
             endingLineNumber = "17"
             landmarkName = "createNSURLRequest(_:session:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Sources/Huntaway/Configuration.swift"
-            timestampString = "479372197.071907"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
-            landmarkName = "setHost(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -394,12 +362,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/HTTPClient.swift"
-            timestampString = "479385158.181887"
+            timestampString = "479487720.38133"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "504"
-            endingLineNumber = "504"
-            landmarkName = "send(_:)"
+            startingLineNumber = "509"
+            endingLineNumber = "509"
+            landmarkName = "printSessinoState()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -426,12 +394,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Response.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479464371.450316"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
-            landmarkName = "tick(_:)"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
+            landmarkName = "suspend()"
             landmarkType = "5">
             <Locations>
                <Location
@@ -474,13 +442,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Response.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479464371.450316"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
-            landmarkName = "tick(_:)"
-            landmarkType = "5">
+            startingLineNumber = "232"
+            endingLineNumber = "232"
+            landmarkName = "Response"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -490,13 +458,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Response.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479464371.450316"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
-            landmarkName = "tick(_:)"
-            landmarkType = "5">
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "Response"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -506,12 +474,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Session.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "262"
-            endingLineNumber = "262"
-            landmarkName = "URLSession(_:dataTask:didReceiveData:)"
+            startingLineNumber = "309"
+            endingLineNumber = "309"
+            landmarkName = "URLSession(_:downloadTask:didFinishDownloadingToURL:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -538,12 +506,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Session.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
-            landmarkName = "URLSession(_:dataTask:didReceiveData:)"
+            startingLineNumber = "308"
+            endingLineNumber = "308"
+            landmarkName = "URLSession(_:downloadTask:didFinishDownloadingToURL:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -586,13 +554,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/HTTPClient.swift"
-            timestampString = "479385158.181887"
+            timestampString = "479487720.38133"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "446"
-            endingLineNumber = "446"
-            landmarkName = "download(_:_:_:)"
-            landmarkType = "5">
+            startingLineNumber = "450"
+            endingLineNumber = "450"
+            landmarkName = "HTTPClient"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -650,11 +618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Session.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
+            startingLineNumber = "318"
+            endingLineNumber = "318"
             landmarkName = "URLSession(_:downloadTask:didFinishDownloadingToURL:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -682,12 +650,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Session.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479488099.088348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
-            landmarkName = "URLSession(_:downloadTask:didFinishDownloadingToURL:)"
+            startingLineNumber = "332"
+            endingLineNumber = "332"
+            landmarkName = "URLSession(_:downloadTask:didResumeAtOffset:expectedTotalBytes:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -858,23 +826,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Response.swift"
-            timestampString = "479401783.552901"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "Response"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Sources/Huntaway/Response.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479464371.450316"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "53"
@@ -890,13 +842,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Response.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479464371.450316"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "291"
-            endingLineNumber = "291"
-            landmarkName = "waitForComplete()"
-            landmarkType = "5">
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "Response"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -906,12 +858,204 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Huntaway/Response.swift"
-            timestampString = "479401783.552901"
+            timestampString = "479464371.450316"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "288"
-            endingLineNumber = "288"
-            landmarkName = "waitForComplete()"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
+            landmarkName = "Response"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/Response.swift"
+            timestampString = "479464371.450316"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
+            landmarkName = "Response"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Unitests/Unitests.swift"
+            timestampString = "479404256.435462"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "test_proxy()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Unitests/Unitests.swift"
+            timestampString = "479404308.993807"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
+            landmarkName = "test_proxy()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Unitests/Unitests.swift"
+            timestampString = "479404388.292919"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
+            landmarkName = "test_proxy()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/HTTPClient.swift"
+            timestampString = "479404426.24664"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "HTTPClient"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/Session.swift"
+            timestampString = "479404544.003111"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "init(config:client:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/Session.swift"
+            timestampString = "479404596.997453"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "urlSession"
+            landmarkType = "19">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/Session.swift"
+            timestampString = "479488099.088348"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
+            landmarkName = "URLSession(_:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/Session.swift"
+            timestampString = "479488099.088348"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "URLSession(_:task:didReceiveChallenge:completionHandler:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/Session.swift"
+            timestampString = "479488099.088348"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
+            landmarkName = "URLSession(_:task:didReceiveChallenge:completionHandler:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/Configuration/Auth.swift"
+            timestampString = "479487720.38133"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "basic(user:passwd:url:_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Huntaway/Session.swift"
+            timestampString = "479488099.088348"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "URLSession(_:task:didReceiveChallenge:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
