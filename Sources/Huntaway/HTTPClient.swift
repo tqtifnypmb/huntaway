@@ -420,6 +420,8 @@ public final class HTTPClient {
     
     /// Handle background download session completion when application isn't in foreground.
     /// Only call this inside `application:handleEventsForBackgroundURLSession:completionHandler:`
+    ///
+    /// **NOTE** that the *onCompleteHandler* may not be called, if it's not necessary.
     public func download(identifier: String, wake_up_handler: () -> Void, onCompleteHandler: (url: NSURL) -> Void) {
         for session in self.outlastSession {
             if identifier == session.identifier! {
@@ -431,6 +433,8 @@ public final class HTTPClient {
                 return
             }
         }
+        
+        // Create a brand new session with the given identifier
         let config = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(identifier)
         let s = Session(config: config, client: self, wake_up_handler: wake_up_handler, onCompletionHandler: onCompleteHandler)
         s.handle_wake_up()
