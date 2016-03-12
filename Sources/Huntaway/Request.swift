@@ -12,6 +12,11 @@ public class Request {
     
     private let url: NSURL
     private let method: HTTPClient.Method
+    
+    // auth
+    var basic: (String, String)?
+    var digest: (String, String)?
+    
     var HTTPCookies: [String: String]? = nil
     var HTTPHeaders: [String: String]? = nil
     
@@ -28,7 +33,21 @@ public class Request {
     public var shouldHandleCookies = true
     public var rememberRedirectHistory = false
     public var maxRedirect = Int.max
+    
     var current_redirect_count = 0
+    var basicAuthSettings: NSURLCredential? {
+        guard let basicSettings = self.basic else { return nil }
+        
+        let credential = NSURLCredential(user: basicSettings.0, password: basicSettings.1, persistence: .None)
+        return credential
+    }
+    
+    var diegestAuthSettings: NSURLCredential? {
+        guard let digestSettings = self.digest else { return nil }
+        
+        let credential = NSURLCredential(user: digestSettings.0, password: digestSettings.1, persistence: .None)
+        return credential
+    }
     
     /// Indicate whether data of this request send in stream mode.
     /// If you want to send a file that's too big to be read into memory
@@ -80,6 +99,14 @@ public class Request {
                 self.HTTPHeaders![key] = value
             }
         }
+    }
+    
+    public func basicAuth(user user: String, passwd: String) {
+        self.basic = (user, passwd)
+    }
+    
+    public func digestAuth(user user: String, passwd: String) {
+        self.digest = (user, passwd)
     }
 }
 

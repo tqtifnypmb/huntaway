@@ -184,8 +184,29 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+  
+        self.responsesLock.lock()
+        let response = self.responses[task.taskIdentifier]
+        self.responsesLock.unlock()
+        guard let resp = response else { return completionHandler(.PerformDefaultHandling, nil) }
+        
+        // Try per request sepecific auth
+        
+        if let requestBasic = resp.request.basicAuthSettings {
+            resp.request.basic = nil
+            
+            return completionHandler(.UseCredential, requestBasic)
+        }
+        
+        if let requestDigest = resp.request.diegestAuthSettings {
+            resp.request.digest = nil
+            
+            return completionHandler(.UseCredential, requestDigest)
+        }
+        
+        // Try global auth 
+        
         var credentials: [String: NSURLCredential] = [:]
-        // Try to get all credentials with same protection host
         if session.configuration.URLCredentialStorage != nil {
             for (space, credential) in session.configuration.URLCredentialStorage!.allCredentials {
                 guard challenge.protectionSpace.host == space.host else { continue }
@@ -196,12 +217,6 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
             }
         }
         guard !credentials.isEmpty && challenge.previousFailureCount < credentials.count else { return completionHandler(.PerformDefaultHandling, nil) }
-        
-        self.responsesLock.lock()
-        let response = self.responses[task.taskIdentifier]
-        self.responsesLock.unlock()
-        
-        guard let resp = response else { return completionHandler(.PerformDefaultHandling, nil) }
         
         if challenge.previousFailureCount == 0 {
             let (username, credential) = credentials.first!
