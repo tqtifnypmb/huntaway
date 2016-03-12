@@ -25,7 +25,7 @@ public class Auth {
     }
     
     /// Use HTTP basic authentication for *url*
-    public func basic(user: String, passwd: String, url: NSURL, _ realm: String? = nil) -> Auth {
+    public func basic(user user: String, passwd: String, url: NSURL, _ realm: String? = nil) -> Auth {
         guard let host = url.host else { return self }  // FIXME: Just ignore error silently??
         
         self.config.changed = true
@@ -38,7 +38,7 @@ public class Auth {
     }
     
     /// Use HTTP digest authentication for *url*
-    public func digest(user: String, passwd: String, url: NSURL, _ realm: String? = nil) -> Auth {
+    public func digest(user user: String, passwd: String, url: NSURL, _ realm: String? = nil) -> Auth {
         guard let host = url.host else { return self }  // FIXME: Just ignore error silently??
         
         self.config.changed = true
