@@ -196,23 +196,28 @@ class Unitests: XCTestCase {
     }
     
     func test_download() {
-        if let resp = HTTPClient.sharedHTTPClient().download("http://www.baidu.com") {
-            resp.onComplete() { (respe, error) in
-                print(respe.downloadedFile)
-                do {
-                    let url = try NSFileManager.defaultManager().URLForDirectory(.DesktopDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false).URLByAppendingPathComponent("abc.txt")
-                    try NSFileManager.defaultManager().copyItemAtPath(resp.downloadedFile!.path!, toPath: url.path!)
-                } catch {
-                    print(error)
-                }
-                
+        guard let resp = HTTPClient.sharedHTTPClient().download("http://speedtest.dal01.softlayer.com/downloads/test10.zip") else { return }
+        
+        resp.onComplete() { (respe, error) in
+            print(respe.downloadedFile)
+            do {
+                let url = try NSFileManager.defaultManager().URLForDirectory(.DesktopDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false).URLByAppendingPathComponent("abc.txt")
+                try NSFileManager.defaultManager().copyItemAtPath(resp.downloadedFile!.path!, toPath: url.path!)
+            } catch {
+                print(error)
             }
-            resp.tick()
-            print(resp.statusCode)
-            sleep(10)
+            
         }
+        
+        resp.onProcess() { (progress, error) in
+            print(progress.description)
+        }
+        
+        resp.tick()
+        print(resp.statusCode)
+        sleep(10)
     }
-    
+
     func test_json() {
         if let resp = HTTPClient.sharedHTTPClient().get("http://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"])?.tick() {
             if let data = resp.text {
