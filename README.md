@@ -111,7 +111,7 @@ Huntaway currently supports *HTTP Basic Auth* and *HTTP Digest Auth*. You can us
 - Response is thread-safe
 - HTTPClient is thread-safe, unless you're using *singleton* mode
 - Request is **not** thread-safe
-- Proxy, Auth, Configuration are all not thread-safe
+- Proxy, Auth, Configuration are all **not** thread-safe
 
 
 ## Usage
