@@ -101,16 +101,23 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.unlock()
         
         if resp.request.outlast && responsesEmpty {
-            self.urlSession.finishTasksAndInvalidate()
             self.httpClient.removeSession(self)
         } else if self.decaying && responsesEmpty {
-            self.urlSession.finishTasksAndInvalidate()
             self.httpClient.removeSession(self)
         }
     }
     
     func decaySelf() {
         self.decaying = true
+        self.urlSession.finishTasksAndInvalidate()
+    }
+    
+    var isEmpty: Bool {
+        var empty = false
+        self.urlSession.getTasksWithCompletionHandler() { (dataTasks, uploadTasks, downloadTasks) in
+            empty = dataTasks.isEmpty && uploadTasks.isEmpty && downloadTasks.isEmpty
+        }
+        return empty
     }
     
     func register_wake_up_completion_handler(handler: () -> Void) {

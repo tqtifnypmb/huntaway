@@ -498,14 +498,10 @@ public final class HTTPClient {
     
     // Apply new configuration
     func applyConfig(config: NSURLSessionConfiguration) {
-        //FIXME: Empty Session may never be removed
-        self.defaultSession.decaySelf()
-        self.decaySession.append(self.defaultSession)
+        if !self.defaultSession.isEmpty {
+            self.defaultSession.decaySelf()
+            self.decaySession.append(self.defaultSession)
+        }
         self.defaultSession = Session(config: config, client: self)
-    }
-    
-    func printSessinoState() {
-        print("decay ==> \(self.decaySession.count)")
-        print("outlast ==> \(self.outlastSession.count)")
     }
 }
