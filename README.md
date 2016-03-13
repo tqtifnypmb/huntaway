@@ -138,3 +138,40 @@ Huntaway currently supports *HTTP Basic Auth* and *HTTP Digest Auth*. You can us
     
 ```
 
+- Stream Upload
+
+If you want to upload a file, which is too big to be read into memory, you can use streamed upload.
+All you need to do is turn stream option on :)
+
+```
+    HTTPClient.sharedHTTPClient().upload(url, file, true)?.tick() { (resp, error) in
+    }
+
+```
+
+- Background Task
+
+If you want to upload a file or download a file even when your app is not in the foreground, you can use background task.
+Again, All you need to do is turn outlast option on :>
+*BTW, for download task outlast is default to be true*
+
+```
+    // Background post
+    client.post(url, file, false, true)?.tick() { (resp, error) in
+    }
+
+    // Background download
+    client.download(url, true) { (resp, error) in
+    }
+```
+
+And in order to finish background task, when your app is not in the foreground, you need to do:
+In your AppDelegate file
+
+```
+    func application(application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: () -> Void) 
+    {
+        client.download(identifier, wake_up_handler: completionHandler, onCompleteHandler: { url in
+            })
+    }
+```
