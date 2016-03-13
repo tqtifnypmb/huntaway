@@ -80,6 +80,9 @@ Finally, you have to tick the response to let things actually happen
     resp.tick()
 ```
 
+**NOTE** Once ticked respones behave like a [future](https://en.wikipedia.org/wiki/Futures_and_promises) object. Any
+accesses before response is ready will block the accessing thread.
+
 ### Auth
 
     Huntaway currently supports *HTTP Basic Auth* and *HTTP Digest Auth*. You can use it in two ways, *globally* or *per request*.
