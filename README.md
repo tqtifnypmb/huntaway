@@ -108,8 +108,8 @@ Huntaway currently supports *HTTP Basic Auth* and *HTTP Digest Auth*. You can us
 ```
 
 ### Thread safety
-- Response should be thread-safe
-- HTTPClient should be thread-safe, unless you're using *singleton* mode
+- Response is thread-safe
+- HTTPClient is thread-safe, unless you're using *singleton* mode
 - Request is **not** thread-safe
 
 
