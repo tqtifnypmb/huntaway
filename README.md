@@ -153,6 +153,7 @@ All you need to do is turn stream option on :)
 
 If you want to upload a file or download a file even when your app is not in the foreground, you can use background task.
 Again, All you need to do is turn outlast option on :>
+
 *BTW, for download task outlast is default to be true*
 
 ```
