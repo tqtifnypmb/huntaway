@@ -172,7 +172,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         }
         
         resp.markCompleted()
-        if let completeHandler = resp.complete_handler {
+        if let completeHandler = resp.completeHandler {
             completeHandler(resp: resp, error: error)
         }
     }
@@ -232,7 +232,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let resp = self.responses[task.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let processHandler = resp?.process_handler else { return }
+        guard let processHandler = resp?.processHandler else { return }
         
         let progress = Progress(type: .Sending, did: bytesSent, done: totalBytesSent, workload: totalBytesExpectedToSend)
         processHandler(progress: progress)
@@ -264,8 +264,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
             
             if resp.request.rememberRedirectHistory {
                 if let url = request.URL {
-                    resp.HTTPredirectHistory = resp.HTTPredirectHistory ?? []
-                    resp.HTTPredirectHistory?.append(url)
+                    resp.HTTPRedirectHistory = resp.HTTPRedirectHistory ?? []
+                    resp.HTTPRedirectHistory?.append(url)
                 }
             }
         }
@@ -309,7 +309,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         }
         
         resp.markCompleted()
-        if let completeHandler = resp.download_handler {
+        if let completeHandler = resp.downloadHandler {
             completeHandler(url: location)
         }
     }
@@ -319,7 +319,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let resp = self.responses[downloadTask.taskIdentifier]
         self.responsesLock.unlock()
     
-        guard let processHandler = resp?.process_handler else { return }
+        guard let processHandler = resp?.processHandler else { return }
         
         let progress = Progress(type: .Receiving, did: 0, done: fileOffset, workload: expectedTotalBytes)
         processHandler(progress: progress)
@@ -330,7 +330,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         let resp = self.responses[downloadTask.taskIdentifier]
         self.responsesLock.unlock()
         
-        guard let processHandler = resp?.process_handler else { return }
+        guard let processHandler = resp?.processHandler else { return }
         
         let progress = Progress(type: .Receiving, did: bytesWritten, done: totalBytesWritten, workload: totalBytesExpectedToWrite)
         processHandler(progress: progress)

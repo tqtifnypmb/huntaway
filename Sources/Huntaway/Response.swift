@@ -15,12 +15,8 @@ public class Response {
     typealias onProcessHandler = (progress: Progress) -> Void
     typealias onDownloadCompleteHandler = (url: NSURL) -> Void
     
-    private var completeHandler: onCompleteHandler? = nil
-    private var beginHandler: onBeginHandler? = nil
-    private var processHandler: onProcessHandler? = nil
-    private var downloadHandler: onDownloadCompleteHandler? = nil
+
     private let session: Session
-    
     private var resumeData: NSData? = nil
     private var completed: Int32 = 0
     private let condition: NSCondition
@@ -35,8 +31,14 @@ public class Response {
     var HTTPStatusCode: Int = 0
     var errorDescription: NSError? = nil
     var receivedData: [UInt8]? = nil
-    var HTTPredirectHistory: [NSURL]? = nil
+    var HTTPRedirectHistory: [NSURL]? = nil
     var authTriedUsername: [String]? = nil
+    
+    var completeHandler: onCompleteHandler? = nil
+    var beginHandler: onBeginHandler? = nil
+    var processHandler: onProcessHandler? = nil
+    var downloadHandler: onDownloadCompleteHandler? = nil
+    
     
     var waked_up_by_system_completion_handler: (() -> Void)? = nil
    
@@ -141,7 +143,7 @@ public class Response {
         if !self.request.rememberRedirectHistory && self.ticked { return nil }
         
         waitForComplete()
-        return self.HTTPredirectHistory
+        return self.HTTPRedirectHistory
     }
     
     /// Close this response.
@@ -175,7 +177,6 @@ public class Response {
     /// Hooks set after response tick might not be called
     public func onBegin(beginHandler: () -> Void) {
         guard !self.ticked else { return }
-        
         self.beginHandler = beginHandler
     }
     
@@ -187,25 +188,20 @@ public class Response {
     public func onProcess(processHandler: (progress: Progress) -> Void) {
         if !self.ticked {
             self.processHandler = processHandler
-        } else {
-            self.condition.lock()
-            self.processHandler = processHandler
-            self.condition.unlock()
         }
     }
     
+    /// This hook will be called when download is completed.
     public func onDownloadComplete(downloadHandler: ((url: NSURL) -> Void)) {
         if !self.ticked {
             self.downloadHandler = downloadHandler
-        } else {
-            self.condition.lock()
-            self.downloadHandler = downloadHandler
-            self.condition.unlock()
         }
     }
     
-    /// Tick to get response
+    /// Tick to let things happen
     public func tick(completeHandler: ((resp : Response, error: NSError?) -> Void)? = nil) -> Response {
+        guard !self.ticked else { return self }
+        
         if let completeHandler = completeHandler {
             self.onComplete(completeHandler)
         }
@@ -247,27 +243,6 @@ public class Response {
     func markCompleted() {
         OSAtomicCompareAndSwap32(0, 1, &self.completed)
         self.condition.broadcast()
-    }
-    
-    var process_handler: onProcessHandler? {
-        self.condition.lock()
-        let handler = self.processHandler
-        self.condition.unlock()
-        return handler
-    }
-    
-    var complete_handler: onCompleteHandler? {
-        self.condition.lock()
-        let handler = self.completeHandler
-        self.condition.unlock()
-        return handler
-    }
-    
-    var download_handler: onDownloadCompleteHandler? {
-        self.condition.lock()
-        let handler = self.downloadHandler
-        self.condition.unlock()
-        return handler
     }
     
     private func waitForComplete() {
