@@ -81,6 +81,11 @@ Finally, you have to tick the response to let things actually happen
     resp.tick()
 ```
 
+When you're done with response you have to close it.
+```
+    resp.close()
+```
+
 **NOTE** Once ticked respones behave like a [future](https://en.wikipedia.org/wiki/Futures_and_promises) object. Any
 accesses before response is ready will block the accessing thread.
 
