@@ -107,6 +107,12 @@ Huntaway currently supports *HTTP Basic Auth* and *HTTP Digest Auth*. You can us
     request.digestAuth(user: xxx, passwd: xxx)
 ```
 
+### Thread safety
+- Response should be thread-safe
+- HTTPClient should be thread-safe, unless you're using *singleton* mode
+- Request is **not** thread-safe
+
+
 ## Usage
 
 - Basic Pattern
