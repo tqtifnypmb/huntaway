@@ -498,8 +498,8 @@ public final class HTTPClient {
     
     // Apply new configuration
     func applyConfig(config: NSURLSessionConfiguration) {
+        self.defaultSession.decaySelf()
         if !self.defaultSession.isEmpty {
-            self.defaultSession.decaySelf()
             self.decaySession.append(self.defaultSession)
         }
         self.defaultSession = Session(config: config, client: self)
