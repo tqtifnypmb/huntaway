@@ -46,8 +46,9 @@ Huntaway's goal is:
 
 - More Control
 
-  *Response Side*
 ```
+    //Response Side
+
     let response = HTTPClient.sharedHTTPClient().post("https://www.google.com")?
     response.onBegin() {
         // do somthing when request begin
@@ -64,9 +65,9 @@ Huntaway's goal is:
     response.tick()
 ```
 
-  *Request Side*
-    
 ```
+  //Request Side
+
   let request = HTTPClient.sharedHTTPClient().prepareRequest("https://www.google.com", .GET)
   request.setHeaders(xxx)
   request.rememberRedirectHistory = true
