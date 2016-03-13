@@ -154,17 +154,17 @@ All you need to do is turn stream option on :)
 If you want to upload a file or download a file even when your app is not in the foreground, you can use background task.
 Again, All you need to do is turn outlast option on :>
 
-*BTW, for download task outlast is default to be true*
-
 ```
     // Background post
     client.post(url, file, false, true)?.tick() { (resp, error) in
     }
 
     // Background download
-    client.download(url, true) { (resp, error) in
+    client.download(url, true)?.tick() { (resp, error) in
     }
 ```
+*BTW, for download task outlast is default to be true*
+
 
 And in order to finish background task, when your app is not in the foreground, you need to do:
 In your AppDelegate file
