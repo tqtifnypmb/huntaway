@@ -167,6 +167,7 @@ Again, All you need to do is turn outlast option on :>
 
 
 And in order to finish background task, when your app is not in the foreground, you need to do:
+
 In your AppDelegate file
 
 ```
