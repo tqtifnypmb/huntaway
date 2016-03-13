@@ -186,16 +186,14 @@ public class Response {
     /// **Note** This hook should be set before response get ticked.
     /// Hooks set after response tick might not be called
     public func onProcess(processHandler: (progress: Progress) -> Void) {
-        if !self.ticked {
-            self.processHandler = processHandler
-        }
+        guard !self.ticked else { return }
+        self.processHandler = processHandler
     }
     
     /// This hook will be called when download is completed.
     public func onDownloadComplete(downloadHandler: ((url: NSURL) -> Void)) {
-        if !self.ticked {
-            self.downloadHandler = downloadHandler
-        }
+        guard !self.ticked else { return }
+        self.downloadHandler = downloadHandler
     }
     
     /// Tick to let things happen

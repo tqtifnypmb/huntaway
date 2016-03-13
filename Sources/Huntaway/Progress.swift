@@ -48,7 +48,7 @@ public struct Progress: CustomStringConvertible {
             return String(format: "%.1f", arguments: [Float(self.done) / (1024.0 * 1024.0)]) + "/" + String(format: "%.1f", arguments: [Float(self.workload) / (1024.0 * 1024.0)]) + " Mb"
             
         default:
-            return String(format: "%.3f", arguments: [Float(self.done) / (1024.0 * 1024.0 * 1024.0)]) + "/" + String(format: "%.3f", arguments: [Float(self.workload) / (1024.0 * 1024.0 * 1024.0)]) + " Gb"
+            return String(format: "%.2f", arguments: [Float(self.done) / (1024.0 * 1024.0 * 1024.0)]) + "/" + String(format: "%.2f", arguments: [Float(self.workload) / (1024.0 * 1024.0 * 1024.0)]) + " Gb"
         }
     }
     
