@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Progress {
+public struct Progress: CustomStringConvertible {
     public enum WorkType {
         case Sending
         case Receiving
@@ -29,11 +29,27 @@ public struct Progress {
     
     /// Current work progress.
     /// **progress = done / workload**
-    public var progress: Double {
+    public var progress: Float {
         guard self.workload > 0 else {
             return -1
         }
-        return Double(self.done) / Double(self.workload)
+        return Float(self.done) / Float(self.workload)
+    }
+    
+    public var description: String {
+        switch self.workload {
+        case 0 ..< 1024:
+            return "\(done) / \(workload) bytes"
+            
+        case 1024 ..< 1024 * 1024:
+            return String(format: "%.1f", arguments: [Float(self.done) / 1024.0]) + "/" + String(format: "%.1f", arguments: [Float(self.workload) / 1024.0]) + " Kb"
+            
+        case 1024 * 1024 ..< 1024 * 1024 * 1024:
+            return String(format: "%.1f", arguments: [Float(self.done) / (1024.0 * 1024.0)]) + "/" + String(format: "%.1f", arguments: [Float(self.workload) / (1024.0 * 1024.0)]) + " Mb"
+            
+        default:
+            return String(format: "%.3f", arguments: [Float(self.done) / (1024.0 * 1024.0 * 1024.0)]) + "/" + String(format: "%.3f", arguments: [Float(self.workload) / (1024.0 * 1024.0 * 1024.0)]) + " Gb"
+        }
     }
     
     init(type: WorkType, did: Int64, done: Int64, workload: Int64) {
