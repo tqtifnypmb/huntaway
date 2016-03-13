@@ -27,7 +27,7 @@ Or, you can create a new instance
 
 ###Request
 
-Request represent a HTTP request which is going to be sent. You need this only when you want to do some configurate
+Request represent a HTTP request which is going to be sent. You need this only when you want to do some configurations
 before the request's sent.
 
 ```
@@ -103,17 +103,17 @@ Finally, you have to tick the response to let things actually happen
 - Basic Pattern
 ```
     // GET
-    HTTPClient.sharedHTTPClient().get("https://www.google.com")?.tick() { (response, error) in
+    HTTPClient.sharedHTTPClient().get(url)?.tick() { (response, error) in
         // do something with the response
     }
 
     // POST
-    HTTPClient.sharedHTTPClient().post("https://www.google.com", "data_to_post")?.tick() { (response, error) in
+    HTTPClient.sharedHTTPClient().post(url, data)?.tick() { (response, error) in
         //...
     }
 
     // DOWNLOAD
-    HTTPClient.sharedHTTPClient().download("https://www.google.com")?.tick() { (resp, error) in
+    HTTPClient.sharedHTTPClient().download(url)?.tick() { (resp, error) in
         //...
     }
     // so on
