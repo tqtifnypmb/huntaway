@@ -4,6 +4,7 @@ Huntaway is a Swift HTTP client inspired by *How complex it is to make a simple 
 Huntaway's goal is: 
 - Make a HTTP request is as simple as calling a function.
 - No complex configuration needed
+- Thread safe
 
 ## Badges
 [![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
