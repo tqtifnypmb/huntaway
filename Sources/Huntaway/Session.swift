@@ -150,7 +150,6 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         self.responsesLock.unlock()
         
         guard let resp = response else { return }
-        guard !(resp.task is NSURLSessionDownloadTask) else { return }
         
         resp.errorDescription = error
         
@@ -175,11 +174,6 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         resp.markCompleted()
         if let completeHandler = resp.complete_handler {
             completeHandler(resp: resp, error: error)
-        }
-        
-        // If we're waked up by system
-        if let completionHandler = resp.waked_up_by_system_completion_handler {
-            completionHandler()
         }
     }
     
@@ -241,7 +235,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         guard let processHandler = resp?.process_handler else { return }
         
         let progress = Progress(type: .Sending, did: bytesSent, done: totalBytesSent, workload: totalBytesExpectedToSend)
-        processHandler(progress: progress, error: task.error)
+        processHandler(progress: progress)
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, needNewBodyStream completionHandler: (NSInputStream?) -> Void) {
@@ -313,17 +307,10 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
             }
             return
         }
-        resp.downloadedFilePath = location
         
         resp.markCompleted()
-        if let completeHandler = resp.complete_handler {
-            completeHandler(resp: resp, error: nil)
-        }
-        
-        // If we're waked up by the system.
-        // we need to call systems hook
-        if let completionHandler = resp.waked_up_by_system_completion_handler {
-            completionHandler()
+        if let completeHandler = resp.download_handler {
+            completeHandler(url: location)
         }
     }
     
@@ -335,7 +322,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         guard let processHandler = resp?.process_handler else { return }
         
         let progress = Progress(type: .Receiving, did: 0, done: fileOffset, workload: expectedTotalBytes)
-        processHandler(progress: progress, error: downloadTask.error)
+        processHandler(progress: progress)
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
@@ -346,6 +333,6 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         guard let processHandler = resp?.process_handler else { return }
         
         let progress = Progress(type: .Receiving, did: bytesWritten, done: totalBytesWritten, workload: totalBytesExpectedToWrite)
-        processHandler(progress: progress, error: downloadTask.error)
+        processHandler(progress: progress)
     }
 }
