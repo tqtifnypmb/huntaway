@@ -107,6 +107,13 @@ Huntaway currently supports *HTTP Basic Auth* and *HTTP Digest Auth*. You can us
     request.digestAuth(user: xxx, passwd: xxx)
 ```
 
+### Thread safety
+- Response is thread-safe
+- HTTPClient is thread-safe, unless you're using *singleton* mode
+- Request is **not** thread-safe
+- Proxy, Auth, Configuration are all **not** thread-safe
+
+
 ## Usage
 
 - Basic Pattern
@@ -171,7 +178,7 @@ Again, All you need to do is turn outlast option on :>
 *BTW, for download task outlast is default to be true*
 
 
-And in order to finish background task, when your app is not in the foreground, you need to do:
+And in order to finish background task when your app is running in the background, you need to :
 
 In your AppDelegate file
 
