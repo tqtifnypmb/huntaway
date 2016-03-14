@@ -37,6 +37,8 @@ class ViewController: UIViewController {
             guard error == nil else { print(error?.localizedDescription) ; return }
             print(resp.statusCode)
             print(resp.text)
+            
+            resp.close()
         }
     }
     
@@ -48,6 +50,8 @@ class ViewController: UIViewController {
             guard error == nil else { print(error?.localizedDescription) ; return }
             print(resp.statusCode)
             print(resp.text)
+            
+            resp.close()
         }
     }
     
@@ -81,6 +85,10 @@ class ViewController: UIViewController {
             dispatch_async(dispatch_get_main_queue()) {
                 self._download_progress.hidden = true
                 self._download_progress_field.hidden = true
+                
+                if is_wake_up_by_background_task {
+                    self.handleBackgroundTask()
+                }
             }
             
             print(resp.statusCode)
@@ -91,6 +99,8 @@ class ViewController: UIViewController {
         }
         
         resp.tick()
+        
+        // TODO: How to force system kill me???
     }
     
     func handleBackgroundTask() {

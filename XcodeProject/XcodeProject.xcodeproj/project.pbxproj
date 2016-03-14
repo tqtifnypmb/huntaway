@@ -357,6 +357,11 @@
 					4136FB2A1C952C2C00B5E14D = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 6TV9JKNLCC;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					4136FB3D1C952C2C00B5E14D = {
 						CreatedOnToolsVersion = 7.2;
@@ -756,6 +761,7 @@
 				4136FB511C952C2C00B5E14D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4136FB571C952C2C00B5E14D /* Build configuration list for PBXNativeTarget "iOS_TestTests" */ = {
 			isa = XCConfigurationList;
@@ -764,6 +770,7 @@
 				4136FB531C952C2C00B5E14D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4136FB581C952C2C00B5E14D /* Build configuration list for PBXNativeTarget "iOS_TestUITests" */ = {
 			isa = XCConfigurationList;
@@ -772,6 +779,7 @@
 				4136FB551C952C2C00B5E14D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		41737CFA1C919B6F0021434C /* Build configuration list for PBXNativeTarget "Unitests" */ = {
 			isa = XCConfigurationList;
