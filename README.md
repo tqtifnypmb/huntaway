@@ -2,7 +2,8 @@
 
 Huntaway is a Swift HTTP client inspired by *How complex it is to make a simple http request using NSURLSession*.
 Huntaway's goal is: 
-- Make a HTTP request is as simple as calling a function.
+- Make a HTTP request as simple as calling a function.
+- Support background task.
 - No complex configuration needed
 - Thread safe
 
