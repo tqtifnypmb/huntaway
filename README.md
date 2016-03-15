@@ -1,7 +1,9 @@
 ## Introduction
 
-Huntaway is a Swift HTTP client inspired by *How complex it is to make a simple http request using NSURLSession*.
-Huntaway's goal is: 
+Huntaway is a Swift HTTP client inspired by *How complex it is to make a simple http request using NSURLSession*.[see Usage](https://github.com/tqtifnypmb/huntaway#usage)
+
+## Goals
+
 - Make a HTTP request as simple as calling a function.
 - Support background task.
 - No complex configuration needed
