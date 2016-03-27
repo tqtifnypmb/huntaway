@@ -166,14 +166,12 @@ class Unitests: XCTestCase {
         }
         
         client.config.shouldSetCookies(true).apply()
-        client.printSessinoState()
         client.get("http://httpbin.org/get")?.tick() { (resp, error) in
             print("=====")
             resp.close()
         }
         
         sleep(5)
-        client.printSessinoState()
     }
     
     func test_hook() {
@@ -181,7 +179,7 @@ class Unitests: XCTestCase {
             resp.onBegin() {
                 print("request begins")
             }
-            resp.onProcess() { (progress, error) in
+            resp.onProcess() { progress in
                 print("Workload ==> \(progress.workload)")
                 print("Done ==> \(progress.done)")
                 print("Did ==> \(progress.did)")
@@ -198,18 +196,18 @@ class Unitests: XCTestCase {
     func test_download() {
         guard let resp = HTTPClient.sharedHTTPClient().download("http://speedtest.dal01.softlayer.com/downloads/test10.zip") else { return }
         
-        resp.onComplete() { (respe, error) in
-            print(respe.downloadedFile)
+        resp.onDownloadComplete() { (url) in
+            print(url)
             do {
-                let url = try NSFileManager.defaultManager().URLForDirectory(.DesktopDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false).URLByAppendingPathComponent("abc.txt")
-                try NSFileManager.defaultManager().copyItemAtPath(resp.downloadedFile!.path!, toPath: url.path!)
+                let url2 = try NSFileManager.defaultManager().URLForDirectory(.DesktopDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false).URLByAppendingPathComponent("abc.txt")
+                try NSFileManager.defaultManager().copyItemAtPath(url.path!, toPath: url2.path!)
             } catch {
                 print(error)
             }
             
         }
         
-        resp.onProcess() { (progress, error) in
+        resp.onProcess() { progress in
             print(progress.description)
         }
         
