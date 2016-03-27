@@ -58,7 +58,7 @@ You get a response by sending a request
     let resp = HTTPClient.sharedHTTPClient().get(url)
 ```
 
-Set hook for response data
+Set hooks for response data
 ```
 
     // Called when response begin. This can be called once
@@ -132,7 +132,7 @@ Huntaway currently supports *HTTP Basic Auth* and *HTTP Digest Auth*. You can us
     }
 
     // DOWNLOAD
-    HTTPClient.sharedHTTPClient().download(url)?.tick() { (resp, error) in
+    HTTPClient.sharedHTTPClient().download(url)?.tick() { url in
         //...
     }
     // so on
@@ -175,7 +175,7 @@ Again, All you need to do is turn outlast option on :>
     }
 
     // Background download
-    client.download(url, true)?.tick() { (resp, error) in
+    client.download(url, true)?.tick() { url in
     }
 ```
 *BTW, for download task outlast is default to be true*
