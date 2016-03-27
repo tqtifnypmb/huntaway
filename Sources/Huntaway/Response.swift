@@ -226,13 +226,10 @@ public class Response {
     }
     
     /// Tick to start download
-    public func tick(downloadCompleteHandler: ((url: NSURL) -> Void)? = nil) -> Response {
+    public func tick(downloadCompleteHandler: ((url: NSURL) -> Void)) -> Response {
         guard !self.ticked else { return self }
         
-        if let handler = downloadCompleteHandler {
-            self.onDownloadComplete(handler)
-        }
-        
+        self.onDownloadComplete(downloadCompleteHandler)
         return self.do_tick()
     }
     
