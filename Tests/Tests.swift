@@ -1,14 +1,14 @@
 //
-//  Unitests.swift
-//  Unitests
+//  Tests.swift
+//  Tests
 //
-//  Created by Tqtifnypmb on 3/10/16.
+//  Created by Tqtifnypmb on 4/1/16.
 //  Copyright © 2016 Tqtifnypmb. All rights reserved.
 //
 
 import XCTest
 
-class Unitests: XCTestCase {
+class Tests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -42,7 +42,7 @@ class Unitests: XCTestCase {
         if let resp = HTTPClient.sharedHTTPClient().post("http://requestb.in/1f6gh8p1", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cpp")) {
             print(resp.statusCode)
             if let data = resp.body {
-               print(data)
+                print(data)
             }
         }
     }
@@ -195,7 +195,6 @@ class Unitests: XCTestCase {
     
     func test_download() {
         guard let resp = HTTPClient.sharedHTTPClient().download("http://speedtest.dal01.softlayer.com/downloads/test10.zip") else { return }
-        
         resp.onDownloadComplete() { (url) in
             print(url)
             do {
@@ -215,7 +214,7 @@ class Unitests: XCTestCase {
         print(resp.statusCode)
         sleep(10)
     }
-
+    
     func test_json() {
         if let resp = HTTPClient.sharedHTTPClient().get("http://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"])?.tick() {
             if let data = resp.text {
@@ -231,7 +230,7 @@ class Unitests: XCTestCase {
     func test_multi_thread() {
         let client = HTTPClient()
         let queue = NSOperationQueue()
-
+        
         for _ in 0 ..< 60 {
             queue.addOperationWithBlock() {
                 if let resp = client.get("http://www.baidu.com")?.tick() {
