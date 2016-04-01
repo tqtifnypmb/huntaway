@@ -10,7 +10,6 @@ Huntaway is a Swift HTTP client inspired by *How complex it is to make a simple 
 - Thread safe
 
 ## Badges
-[![Build Status](https://travis-ci.org/tqtifnypmb/huntaway.svg?branch=master)](https://travis-ci.org/tqtifnypmb/huntaway)
 [![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 ## Documentation
