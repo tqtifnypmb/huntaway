@@ -315,6 +315,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
                 ptr = ptr.advancedBy(1)
             }
         }
+        
+        resp.dataReceivedHandler?()
     }
     
     // MARK: - Session Download Delegate

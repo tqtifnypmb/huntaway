@@ -26,7 +26,7 @@
 
 import Foundation
 
-extension HTTPClient {
+public extension HTTPClient {
     public enum Method{
         case GET
         case PUT

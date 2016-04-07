@@ -79,6 +79,10 @@ class ViewController: UIViewController {
             print(url)
         }
         
+        resp.onDataReceived() { data in
+            print(data.length)
+        }
+        
         resp.onComplete() { (resp, error) in
             guard error == nil else { print(error?.localizedDescription) ; return }
             

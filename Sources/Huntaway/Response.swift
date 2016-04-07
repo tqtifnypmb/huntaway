@@ -32,6 +32,7 @@ public class Response {
     typealias onBeginHandler = () -> Void
     typealias onProcessHandler = (progress: Progress) -> Void
     typealias onDownloadCompleteHandler = (url: NSURL) -> Void
+    typealias onDataReceivedHandler = () -> Void
     
 
     private let session: Session
@@ -56,7 +57,7 @@ public class Response {
     var beginHandler: onBeginHandler? = nil
     var processHandler: onProcessHandler? = nil
     var downloadHandler: onDownloadCompleteHandler? = nil
-    
+    var dataReceivedHandler: onDataReceivedHandler? = nil
     
     var waked_up_by_system_completion_handler: (() -> Void)? = nil
    
@@ -171,6 +172,7 @@ public class Response {
     /// response
     public func close() {
         self.session.removeResponse(self)
+        self.removeHooks()
     }
     
     /// Set onComplete callback.
@@ -212,6 +214,12 @@ public class Response {
     public func onDownloadComplete(downloadHandler: ((url: NSURL) -> Void)) {
         guard !self.ticked else { return }
         self.downloadHandler = downloadHandler
+    }
+    
+    /// This hook will be called everytime data received.
+    public func onDataReceived(dataReceivedHandler: (() -> Void)) {
+        guard !self.ticked else { return }
+        self.dataReceivedHandler = dataReceivedHandler
     }
     
     /// Tick to let things happen
@@ -261,6 +269,7 @@ public class Response {
     /// Cancels the task.
     public func cancel() {
         self.task.cancel()
+        self.removeHooks()
     }
     
     /// Resumes the task, if it is suspended.
@@ -283,5 +292,13 @@ public class Response {
             self.condition.wait()
         }
         self.condition.unlock()
+    }
+    
+    private func removeHooks() {
+        self.completeHandler = nil
+        self.processHandler = nil
+        self.dataReceivedHandler = nil
+        self.downloadHandler = nil
+        self.beginHandler = nil
     }
 }
