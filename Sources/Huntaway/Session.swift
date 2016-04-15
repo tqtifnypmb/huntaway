@@ -31,6 +31,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         return NSURLSession(configuration: self.config, delegate: self, delegateQueue: nil)
     }()
     
+    private let handlerQueue = NSOperationQueue()
     private var responses: [Int: Response] = [:]
     private let responsesLock = NSLock()
     private let config: NSURLSessionConfiguration
@@ -40,6 +41,10 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     init(config: NSURLSessionConfiguration, client: HTTPClient) {
         self.config = config
         self.httpClient = client
+    }
+    
+    deinit {
+        self.handlerQueue.cancelAllOperations()
     }
     
     // This's for system-wake-up-handling only
@@ -200,7 +205,9 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         }
         
         resp.markCompleted()
-        resp.completeHandler?(resp: resp, error: error)
+        if let handler = resp.completeHandler {
+            self.handlerQueue.addOperationWithBlock() { handler(resp: resp, error: error) }
+        }
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
@@ -261,7 +268,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         guard let processHandler = resp?.processHandler else { return }
         
         let progress = Progress(type: .Sending, did: bytesSent, done: totalBytesSent, workload: totalBytesExpectedToSend)
-        processHandler(progress: progress)
+        self.handlerQueue.addOperationWithBlock() { processHandler(progress: progress) }
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, needNewBodyStream completionHandler: (NSInputStream?) -> Void) {
@@ -316,7 +323,9 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
             }
         }
         
-        resp.dataReceivedHandler?()
+        if let handler = resp.dataReceivedHandler {
+            self.handlerQueue.addOperationWithBlock() { handler() }
+        }
     }
     
     // MARK: - Session Download Delegate
@@ -337,7 +346,9 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         }
         
         resp.markCompleted()
-        resp.downloadHandler?(url: location)
+        if let handler = resp.downloadHandler {
+            self.handlerQueue.addOperationWithBlock() { handler(url: location) }
+        }
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
@@ -348,7 +359,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         guard let processHandler = resp?.processHandler else { return }
         
         let progress = Progress(type: .Receiving, did: 0, done: fileOffset, workload: expectedTotalBytes)
-        processHandler(progress: progress)
+        self.handlerQueue.addOperationWithBlock() { processHandler(progress: progress) }
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
@@ -359,6 +370,6 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         guard let processHandler = resp?.processHandler else { return }
         
         let progress = Progress(type: .Receiving, did: bytesWritten, done: totalBytesWritten, workload: totalBytesExpectedToWrite)
-        processHandler(progress: progress)
+        self.handlerQueue.addOperationWithBlock() { processHandler(progress: progress) }
     }
 }

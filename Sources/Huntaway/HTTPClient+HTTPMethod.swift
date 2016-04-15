@@ -37,12 +37,7 @@ public extension HTTPClient {
         case PATCH
     }
     
-    static private var sharedInstance: HTTPClient? = nil
-    static public func sharedHTTPClient() -> HTTPClient {
-        guard let instance = sharedInstance else {
-            self.sharedInstance = HTTPClient()
-            return self.sharedInstance!
-        }
-        return instance
-    }
+    static public let sharedHTTPClient: HTTPClient = {
+        return HTTPClient()
+    }()
 }

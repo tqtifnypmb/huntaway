@@ -21,7 +21,7 @@ class Tests: XCTestCase {
     }
     
     func test_get() {
-        if let resp = HTTPClient.sharedHTTPClient().get("http://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"])?.tick() {
+        if let resp = HTTPClient.sharedHTTPClient.get("http://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"])?.tick() {
             if let data = resp.text {
                 print(data)
             }
@@ -30,7 +30,7 @@ class Tests: XCTestCase {
     }
     
     func test_post_string() {
-        if let resp = HTTPClient.sharedHTTPClient().post("http://requestb.in/1743q801", data: "Hello world_你好世界") {
+        if let resp = HTTPClient.sharedHTTPClient.post("http://requestb.in/1743q801", data: "Hello world_你好世界") {
             print(resp.statusCode)
             if let data = resp.body {
                 print(data)
@@ -39,7 +39,7 @@ class Tests: XCTestCase {
     }
     
     func test_post_file_without_stream() {
-        if let resp = HTTPClient.sharedHTTPClient().post("http://requestb.in/1f6gh8p1", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cpp")) {
+        if let resp = HTTPClient.sharedHTTPClient.post("http://requestb.in/1f6gh8p1", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cpp")) {
             print(resp.statusCode)
             if let data = resp.body {
                 print(data)
@@ -48,7 +48,7 @@ class Tests: XCTestCase {
     }
     
     func test_post_file_with_stream() {
-        if let resp = HTTPClient.sharedHTTPClient().post("http://requestb.in/qe82b4qe", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cpp"), true, false) {
+        if let resp = HTTPClient.sharedHTTPClient.post("http://requestb.in/qe82b4qe", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cpp"), true, false) {
             print(resp.statusCode)
             if let data = resp.body {
                 print(data)
@@ -57,7 +57,7 @@ class Tests: XCTestCase {
     }
     
     func test_ssl() {
-        if let resp = HTTPClient.sharedHTTPClient().get("https://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"]) {
+        if let resp = HTTPClient.sharedHTTPClient.get("https://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"]) {
             if let data = resp.body {
                 print(data)
             }
@@ -65,7 +65,7 @@ class Tests: XCTestCase {
     }
     
     func test_redirect_allow() {
-        if let resp = HTTPClient.sharedHTTPClient().get("https://httpbin.org/redirect/2", ["username": "abasbaba", "passwd": "dsgdsg"]) {
+        if let resp = HTTPClient.sharedHTTPClient.get("https://httpbin.org/redirect/2", ["username": "abasbaba", "passwd": "dsgdsg"]) {
             if let data = resp.body {
                 print(data)
             }
@@ -75,9 +75,9 @@ class Tests: XCTestCase {
     }
     
     func test_redirect_disallow() {
-        if let req = HTTPClient.sharedHTTPClient().prepareRequest("https://httpbin.org/redirect/2", method: .GET) {
+        if let req = HTTPClient.sharedHTTPClient.prepareRequest("https://httpbin.org/redirect/2", method: .GET) {
             req.allowRedirect = false
-            if let resp = HTTPClient.sharedHTTPClient().send(req) {
+            if let resp = HTTPClient.sharedHTTPClient.send(req) {
                 if let data = resp.body {
                     print(data)
                 }
@@ -89,10 +89,10 @@ class Tests: XCTestCase {
     }
     
     func test_cookies() {
-        if let req = HTTPClient.sharedHTTPClient().prepareRequest("https://httpbin.org/cookies", method: .GET) {
+        if let req = HTTPClient.sharedHTTPClient.prepareRequest("https://httpbin.org/cookies", method: .GET) {
             let cookies = ["username": "babababab", "passwd": "fsfsdf"]
             req.setCookies(cookies)
-            if let resp = HTTPClient.sharedHTTPClient().send(req) {
+            if let resp = HTTPClient.sharedHTTPClient.send(req) {
                 if let data = resp.body {
                     print(data)
                 }
@@ -102,10 +102,10 @@ class Tests: XCTestCase {
     }
     
     func test_headers() {
-        if let req = HTTPClient.sharedHTTPClient().prepareRequest("https://httpbin.org/headers", method: .GET) {
+        if let req = HTTPClient.sharedHTTPClient.prepareRequest("https://httpbin.org/headers", method: .GET) {
             let headers = ["username": "babababab", "passwd": "fsfsdf"]
             req.setHeaders(headers)
-            if let resp = HTTPClient.sharedHTTPClient().send(req) {
+            if let resp = HTTPClient.sharedHTTPClient.send(req) {
                 if let data = resp.body {
                     print(data)
                 }
@@ -114,7 +114,7 @@ class Tests: XCTestCase {
     }
     
     func test_put_string() {
-        if let resp = HTTPClient.sharedHTTPClient().put("http://httpbin.org/put", data: "Hello world_你好世界", true) {
+        if let resp = HTTPClient.sharedHTTPClient.put("http://httpbin.org/put", data: "Hello world_你好世界", true) {
             print(resp.statusCode)
             if let data = resp.body {
                 print(data)
@@ -123,7 +123,7 @@ class Tests: XCTestCase {
     }
     
     func test_put_file() {
-        if let resp = HTTPClient.sharedHTTPClient().put("http://httpbin.org/put", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cpp"), false) {
+        if let resp = HTTPClient.sharedHTTPClient.put("http://httpbin.org/put", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cpp"), false) {
             print(resp.statusCode)
             if let data = resp.body {
                 print(data)
@@ -132,7 +132,7 @@ class Tests: XCTestCase {
     }
     
     func test_put_file_nonexist() {
-        if let resp = HTTPClient.sharedHTTPClient().put("http://httpbin.org/put", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cppxxx"), false) {
+        if let resp = HTTPClient.sharedHTTPClient.put("http://httpbin.org/put", file: NSURL(fileURLWithPath: "/Users/tqtifnypmb/local_sender.cppxxx"), false) {
             print(resp.statusCode)
             if let data = resp.body {
                 print(data)
@@ -141,7 +141,7 @@ class Tests: XCTestCase {
     }
     
     func test_delete() {
-        if let resp = HTTPClient.sharedHTTPClient().delete("http://httpbin.org/delete", data: "/Users/tqtifnypmb/local_sender.cppxxx") {
+        if let resp = HTTPClient.sharedHTTPClient.delete("http://httpbin.org/delete", data: "/Users/tqtifnypmb/local_sender.cppxxx") {
             print(resp.statusCode)
             if let data = resp.body {
                 print(data)
@@ -150,7 +150,7 @@ class Tests: XCTestCase {
     }
     
     func test_patch() {
-        if let resp = HTTPClient.sharedHTTPClient().patch("http://httpbin.org/patch", data: "/Users/tqtifnypmb/local_sender.cppxxx") {
+        if let resp = HTTPClient.sharedHTTPClient.patch("http://httpbin.org/patch", data: "/Users/tqtifnypmb/local_sender.cppxxx") {
             print(resp.statusCode)
             if let data = resp.body {
                 print(data)
@@ -175,7 +175,7 @@ class Tests: XCTestCase {
     }
     
     func test_hook() {
-        if let resp = HTTPClient.sharedHTTPClient().get("http://httpbin.org/get") {
+        if let resp = HTTPClient.sharedHTTPClient.get("http://httpbin.org/get") {
             resp.onBegin() {
                 print("request begins")
             }
@@ -194,7 +194,7 @@ class Tests: XCTestCase {
     }
     
     func test_download() {
-        guard let resp = HTTPClient.sharedHTTPClient().download("http://speedtest.dal01.softlayer.com/downloads/test10.zip") else { return }
+        guard let resp = HTTPClient.sharedHTTPClient.download("http://speedtest.dal01.softlayer.com/downloads/test10.zip") else { return }
         resp.onDownloadComplete() { (url) in
             print(url)
             do {
@@ -216,7 +216,7 @@ class Tests: XCTestCase {
     }
     
     func test_json() {
-        if let resp = HTTPClient.sharedHTTPClient().get("http://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"])?.tick() {
+        if let resp = HTTPClient.sharedHTTPClient.get("http://httpbin.org/get", ["username": "abasbaba", "passwd": "dsgdsg"])?.tick() {
             if let data = resp.text {
                 print(data)
             }
@@ -243,9 +243,9 @@ class Tests: XCTestCase {
     }
     
     func test_redirect_history() {
-        if let req = HTTPClient.sharedHTTPClient().prepareRequest("https://httpbin.org/redirect/2", method: .GET) {
+        if let req = HTTPClient.sharedHTTPClient.prepareRequest("https://httpbin.org/redirect/2", method: .GET) {
             req.rememberRedirectHistory = true
-            let resp = HTTPClient.sharedHTTPClient().send(req)?.tick()
+            let resp = HTTPClient.sharedHTTPClient.send(req)?.tick()
             print(resp?.redirectHistory)
         }
     }
@@ -310,9 +310,9 @@ class Tests: XCTestCase {
     }
     
     func test_per_request_auth() {
-        if let req = HTTPClient.sharedHTTPClient().prepareRequest("https://httpbin.org/basic-auth/abcabc/123456", method: .GET) {
+        if let req = HTTPClient.sharedHTTPClient.prepareRequest("https://httpbin.org/basic-auth/abcabc/123456", method: .GET) {
             req.basicAuth(user: "abcabc", passwd: "123456")
-            if let resp = HTTPClient.sharedHTTPClient().send(req)?.tick() {
+            if let resp = HTTPClient.sharedHTTPClient.send(req)?.tick() {
                 if let data = resp.body {
                     print(data)
                 }
