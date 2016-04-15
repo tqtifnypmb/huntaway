@@ -234,7 +234,7 @@ class Tests: XCTestCase {
         for _ in 0 ..< 60 {
             queue.addOperationWithBlock() {
                 if let resp = client.get("http://www.baidu.com")?.tick() {
-                    print(resp.statusCode)
+                    XCTAssertEqual(resp.statusCode, 200)
                     resp.close()
                 }
             }

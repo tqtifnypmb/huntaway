@@ -32,8 +32,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     }()
     
     private let handlerQueue = NSOperationQueue()
+    private let taskQueue = dispatch_queue_create("huntaway.com.github", DISPATCH_QUEUE_SERIAL)
     private var responses: [Int: Response] = [:]
-    private let responsesLock = NSLock()
     private let config: NSURLSessionConfiguration
     private var decaying = false
     private unowned let httpClient: HTTPClient
@@ -72,11 +72,7 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
         case .GET:
             let task = self.urlSession.dataTaskWithRequest(req)
             let resp = Response(task: task, request: request, session: self)
-            
-            self.responsesLock.lock()
-            responses[task.taskIdentifier] = resp
-            self.responsesLock.unlock()
-        
+            dispatch_sync(self.taskQueue) { self.responses[task.taskIdentifier] = resp }
             return resp
            
         case .PATCH:
@@ -99,29 +95,24 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
                 }
             }
             let resp = Response(task: task, request: request, session: self)
-            
-            self.responsesLock.lock()
-            responses[task.taskIdentifier] = resp
-            self.responsesLock.unlock()
+            dispatch_sync(self.taskQueue) { self.responses[task.taskIdentifier] = resp }
             
             return resp
             
         case .DOWNLOAD:
             let task = self.urlSession.downloadTaskWithRequest(req)
             let resp = Response(task: task, request: request, session: self)
-            self.responsesLock.lock()
-            responses[task.taskIdentifier] = resp
-            self.responsesLock.unlock()
+            dispatch_sync(self.taskQueue) { self.responses[task.taskIdentifier] = resp }
             
             return resp
         }
     }
     
     func removeResponse(resp: Response) {
-        self.responsesLock.lock()
-        responses.removeValueForKey(resp.task.taskIdentifier)
+        dispatch_sync(self.taskQueue) {
+            self.responses.removeValueForKey(resp.task.taskIdentifier)
+        }
         let responsesEmpty = responses.isEmpty
-        self.responsesLock.unlock()
         
         if resp.request.outlast && responsesEmpty {
             self.urlSession.finishTasksAndInvalidate()
@@ -178,10 +169,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     // MARK: - Session Task Delegate
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
-        self.responsesLock.lock()
-        let response = self.responses[task.taskIdentifier]
-        self.responsesLock.unlock()
-        
+        var response: Response?
+        dispatch_sync(self.taskQueue) { response = self.responses[task.taskIdentifier] }
         guard let resp = response else { return }
         
         resp.errorDescription = error
@@ -212,9 +201,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
   
-        self.responsesLock.lock()
-        let response = self.responses[task.taskIdentifier]
-        self.responsesLock.unlock()
+        var response: Response?
+        dispatch_sync(self.taskQueue) { response = self.responses[task.taskIdentifier] }
         guard let resp = response else { return completionHandler(.PerformDefaultHandling, nil) }
         
         // Try per request sepecific auth
@@ -261,9 +249,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
-        self.responsesLock.lock()
-        let resp = self.responses[task.taskIdentifier]
-        self.responsesLock.unlock()
+        var resp: Response?
+        dispatch_sync(self.taskQueue) { resp = self.responses[task.taskIdentifier] }
         
         guard let processHandler = resp?.processHandler else { return }
         
@@ -272,11 +259,10 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, needNewBodyStream completionHandler: (NSInputStream?) -> Void) {
-        self.responsesLock.lock()
-        let response = self.responses[task.taskIdentifier]
-        self.responsesLock.unlock()
-        
+        var response: Response?
+        dispatch_sync(self.taskQueue) { response = self.responses[task.taskIdentifier] }
         guard let resp = response else { return }
+        
         if let filePath = resp.request.filePath {
             completionHandler(NSInputStream(URL: filePath))
         } else if let data = resp.request.data {
@@ -285,11 +271,9 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void) {
-        self.responsesLock.lock()
-        let resp = self.responses[task.taskIdentifier]
-        self.responsesLock.unlock()
-        
-        if let resp = resp {
+        var response: Response?
+        dispatch_sync(self.taskQueue) { response = self.responses[task.taskIdentifier] }
+        if let resp = response {
             if !resp.request.allowRedirect || resp.request.current_redirect_count > resp.request.maxRedirect {
                 completionHandler(nil)
                 return
@@ -308,10 +292,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     // MARK: - Session Data Delegate
     
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
-        self.responsesLock.lock()
-        let response = self.responses[dataTask.taskIdentifier]
-        self.responsesLock.unlock()
-        
+        var response: Response?
+        dispatch_sync(self.taskQueue) { response = self.responses[dataTask.taskIdentifier] }
         guard let resp = response else { return }
         
         resp.receivedData = resp.receivedData ?? []
@@ -331,10 +313,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     // MARK: - Session Download Delegate
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        self.responsesLock.lock()
-        let response = self.responses[downloadTask.taskIdentifier]
-        self.responsesLock.unlock()
-        
+        var response: Response?
+        dispatch_sync(self.taskQueue) { response = self.responses[downloadTask.taskIdentifier] }
         guard let resp = response else {
             //  A download finish event sent to an empty session. I guess
             //  that's because we're just waked up by system.
@@ -352,10 +332,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
-        self.responsesLock.lock()
-        let resp = self.responses[downloadTask.taskIdentifier]
-        self.responsesLock.unlock()
-    
+        var resp: Response?
+        dispatch_sync(self.taskQueue) { resp = self.responses[downloadTask.taskIdentifier] }
         guard let processHandler = resp?.processHandler else { return }
         
         let progress = Progress(type: .Receiving, did: 0, done: fileOffset, workload: expectedTotalBytes)
@@ -363,10 +341,8 @@ final class Session: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, N
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        self.responsesLock.lock()
-        let resp = self.responses[downloadTask.taskIdentifier]
-        self.responsesLock.unlock()
-        
+        var resp: Response?
+        dispatch_sync(self.taskQueue) { resp = self.responses[downloadTask.taskIdentifier] }
         guard let processHandler = resp?.processHandler else { return }
         
         let progress = Progress(type: .Receiving, did: bytesWritten, done: totalBytesWritten, workload: totalBytesExpectedToWrite)
